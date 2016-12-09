@@ -8,8 +8,16 @@
 int WIDTH = 1280;
 int HEIGHT = 720;
 
+struct Moon {
+	double radius;
+	double distanceFromPlanet;
+	char texture[];
+};
+
 struct Planet {
 	double radius;
+	char texture[];
+	//Moon moons[] = { {10,10,""} };
 }Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto; //Yes, Pluto is a f**king planet !
 
 void initializePlanets() {
@@ -43,7 +51,7 @@ void drawPlanets() {
 
 
 GLuint tex;
-char title[] = "3D Model Loader Sample";
+char title[] = "Little Big Universe";
 
 // 3D Projection Options
 GLdouble fovy = 45.0;
@@ -69,13 +77,14 @@ public:
 	}
 };
 
+//Initialization of vectors controlling the camera.
 Vector Eye(20, 5, 20);
 Vector At(0, 0, 0);
 Vector Up(0, 1, 0);
 
 int cameraZoom = 0;
 
-// Model Variables
+// An Example of how to create and use models (Model Variables)
 Model_3DS model_house;
 Model_3DS model_tree;
 
@@ -170,37 +179,7 @@ void myInit(void)
 	glEnable(GL_NORMALIZE);
 }
 
-//=======================================================================
-// Render Ground Function
-//=======================================================================
-void RenderGround()
-{
-	glDisable(GL_LIGHTING);	// Disable lighting 
 
-	glColor3f(0.6, 0.6, 0.6);	// Dim the ground texture a bit
-
-	glEnable(GL_TEXTURE_2D);	// Enable 2D texturing
-
-	glBindTexture(GL_TEXTURE_2D, tex_ground.texture[0]);	// Bind the ground texture
-
-	glPushMatrix();
-	glBegin(GL_QUADS);
-	glNormal3f(0, 1, 0);	// Set quad normal direction.
-	glTexCoord2f(0, 0);		// Set tex coordinates ( Using (0,0) -> (5,5) with texture wrapping set to GL_REPEAT to simulate the ground repeated grass texture).
-	glVertex3f(-20, 0, -20);
-	glTexCoord2f(5, 0);
-	glVertex3f(20, 0, -20);
-	glTexCoord2f(5, 5);
-	glVertex3f(20, 0, 20);
-	glTexCoord2f(0, 5);
-	glVertex3f(-20, 0, 20);
-	glEnd();
-	glPopMatrix();
-
-	glEnable(GL_LIGHTING);	// Enable lighting again for other entites coming throung the pipeline.
-
-	glColor3f(1, 1, 1);	// Set material back to white instead of grey used for the ground texture.
-}
 
 //=======================================================================
 // Display Function
@@ -216,21 +195,15 @@ void myDisplay(void)
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, lightIntensity);
 
-	// Draw Ground
-	RenderGround();
 
 	// Draw Tree Model
-	glPushMatrix();
-	glTranslatef(10, 0, 0);
-	glScalef(0.7, 0.7, 0.7);
-	model_tree.Draw();
-	glPopMatrix();
+	//glPushMatrix();
+	//glTranslatef(10, 0, 0);
+	//glScalef(0.7, 0.7, 0.7);
+	//model_tree.Draw();
+	//glPopMatrix();
 
-	// Draw house Model
-	glPushMatrix();
-	glRotatef(90.f, 1, 0, 0);
-	model_house.Draw();
-	glPopMatrix();
+	
 
 
 //sky box
@@ -350,13 +323,13 @@ void myReshape(int w, int h)
 //=======================================================================
 void LoadAssets()
 {
-	// Loading Model files
-	model_house.Load("Models/house/house.3ds");
-	model_tree.Load("Models/tree/Tree1.3ds");
+	//// Loading Model files
+	//model_house.Load("Models/house/house.3ds");
+	//model_tree.Load("Models/tree/Tree1.3ds");
 
-	// Loading texture files
-	tex_ground.Load("Textures/ground.bmp");
-	loadBMP(&tex, "Textures/sky4-jpg.bmp", true);
+	//// Loading texture files
+	//tex_ground.Load("Textures/ground.bmp");
+	//loadBMP(&tex, "Textures/sky4-jpg.bmp", true);
 }
 
 //=======================================================================
