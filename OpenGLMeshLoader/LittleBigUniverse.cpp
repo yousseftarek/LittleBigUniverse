@@ -9,6 +9,8 @@
 int WIDTH = 1280;
 int HEIGHT = 720;
 
+double rotY = 0;
+
 //Textures
 GLuint tex;
 GLTexture tex_Mars;
@@ -74,29 +76,30 @@ void initializePlanets() {
 
 void drawPlanet(Planet planet, int x, int y, int z) {
 
-//	const char *cstr = (planet.texture).c_str();
+	char *texturePath = &planet.texture[0];
 
 	if(planet.name == "Mars")
-		tex_Mars.Load("textures/Mars/marsmap1k.bmp");
+		tex_Mars.Load(texturePath);
 	else if(planet.name == "Earth")
-		tex_Earth.Load("textures/Earth/earth.bmp");
+		tex_Earth.Load(texturePath);
 	else if(planet.name == "Mercury")
-		tex_Mercury.Load("textures/Mercury/mercurymap.bmp");
+		tex_Mercury.Load(texturePath);
 	else if(planet.name == "Jupiter")
-		tex_Jupiter.Load("textures/Jupiter/jupiter.bmp");
+		tex_Jupiter.Load(texturePath);
 	else if(planet.name == "Neptune")
-		tex_Neptune.Load("textures/Neptune/neptunemap.bmp");
+		tex_Neptune.Load(texturePath);
 	else if (planet.name == "Pluto")
-		tex_Pluto.Load("textures/Pluto/plutomap2k.bmp");
+		tex_Pluto.Load(texturePath);
 	else if(planet.name == "Saturn")
-		tex_Saturn.Load("textures/Saturn/saturnmap.bmp");
+		tex_Saturn.Load(texturePath);
 	else if (planet.name == "Uranus")
-		tex_Uranus.Load("textures/Uranus/uranusmap.bmp");
+		tex_Uranus.Load(texturePath);
 	else if (planet.name == "Venus")
-		tex_Venus.Load("textures/Venus/venusmap.bmp");
+		tex_Venus.Load(texturePath);
 	
 	glPushMatrix();
 	glTranslated(x, y, z);
+	glScaled(0.01, 0.01, 0.01);
 	GLUquadricObj *quadric;
 	quadric = gluNewQuadric();
 	gluQuadricDrawStyle(quadric, GLU_FILL);
@@ -107,63 +110,71 @@ void drawPlanet(Planet planet, int x, int y, int z) {
 
 void drawPlanets() {
 
-	glRotated(45,0,1,0);
-	glRotated(-90, 1, 0, 0);
+	//distance from sun in days
+	int maxDistance = 5096;
+	int scalingFactor = 1000;
 
-	//mars
+	//rotation planet around their axes in hours
+
+
 	glPushMatrix();
-	Mars.radius = 5;
-	drawPlanet(Mars, -15, 0, 0);
+	glRotated(45, 1, 1, 0);
+//	glRotated(45, 1, 0, 0);
+
+	//mercury
+	glPushMatrix();
+	glRotated(rotY, 0, 1, 0);
+	glTranslated(-scalingFactor * 58 / maxDistance, 0, 0);
+	drawPlanet(Mercury, scalingFactor * 58 / maxDistance, 0, 0);
+	glPopMatrix();
+
+	//venus
+	glPushMatrix();
+	glTranslated(-scalingFactor * 108 / maxDistance, 0, 0);
+	glRotated(rotY, 0, 1, 0);
+	glTranslated(scalingFactor * 108 / maxDistance, 0, 0);
+	drawPlanet(Venus, scalingFactor * 108 / maxDistance, 0, 0);
 	glPopMatrix();
 
 	//earth
 	glPushMatrix();
-	Earth.radius = 5;
-	drawPlanet(Earth, 0, 0, 0);
+	glTranslated(scalingFactor * 149 / maxDistance, 0, 0);
+	glRotated(rotY, 0, 1, 0);
+	glTranslated(-scalingFactor * 149 / maxDistance, 0, 0);
+	drawPlanet(Earth, scalingFactor * 149 / maxDistance, 0, 0);
 	glPopMatrix();
-
-	//mercury
+	
+	////mars
 	//glPushMatrix();
-	//Mercury.radius = 5;
-	//drawPlanet(Mercury, 15, 0, 0);
+	//drawPlanet(Mars, scalingFactor * 227 / maxDistance, 0, 0);
 	//glPopMatrix();
 
 	////jupiter
-	glPushMatrix();
-	Jupiter.radius = 5;
-	drawPlanet(Jupiter, 15, 0, 0);
-	glPopMatrix();
-
-	////neptune
-	/*glPushMatrix();
-	Neptune.radius = 5;
-	drawPlanet(Neptune, 15, 0, 0);
-	glPopMatrix();*/
-
-	////pluto
 	//glPushMatrix();
-	//Pluto.radius = 5;
-	//drawPlanet(Pluto, 15, 0, 0);
+	//drawPlanet(Jupiter, scalingFactor * 778 / maxDistance, 0, 0);
 	//glPopMatrix();
 
 	////saturn
-	/*glPushMatrix();
-	Saturn.radius = 5;
-	drawPlanet(Saturn, 15, 0, 0);
-	glPopMatrix();*/
+	//glPushMatrix();
+	//drawPlanet(Saturn, scalingFactor * 1426 / maxDistance, 0, 0);
+	//glPopMatrix();
 
 	////uranus
-	/*glPushMatrix();
-	Uranus.radius = 5;
-	drawPlanet(Uranus, 15, 0, 0);
-	glPopMatrix();*/
+	//glPushMatrix();
+	//drawPlanet(Uranus, scalingFactor * 2870 / maxDistance, 0, 0);
+	//glPopMatrix();
 
-	//venus
-	/*glPushMatrix();
-	Venus.radius = 5;
-	drawPlanet(Venus, 15, 0, 0);
-	glPopMatrix();*/
+	////neptune
+	//glPushMatrix();
+	//drawPlanet(Neptune, scalingFactor * 4498 / maxDistance, 0, 0);
+	//glPopMatrix();
 
+	////pluto
+	//glPushMatrix();
+	//drawPlanet(Pluto, scalingFactor * 5906 / maxDistance, 0, 0);
+	//glPopMatrix();
+
+	glPopMatrix();
 }
 
 
@@ -305,7 +316,7 @@ void myDisplay(void)
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, lightIntensity);
 	glEnable(GL_TEXTURE_2D);*/
-	// Draw Tree Model
+	//Draw Tree Model
 	//glPushMatrix();
 	//glTranslatef(10, 0, 0);
 	//glScalef(0.7, 0.7, 0.7);
@@ -314,6 +325,7 @@ void myDisplay(void)
 
 	initializePlanets();
 	drawPlanets();
+	//gluLookAt(Eye.x, Eye.y, Eye.z, At.x, At.y, At.z, Up.x, Up.y, Up.z);
 
 	//sky box
 	/*glPushMatrix();
@@ -350,12 +362,11 @@ void myKeyboard(unsigned char button, int x, int y)
 	default:
 		break;
 	}
-
 	glutPostRedisplay();
 }
 
 //=======================================================================
-// Motion Function
+// Motion Function 
 //=======================================================================
 void myMotion(int x, int y)
 {
@@ -428,13 +439,22 @@ void myReshape(int w, int h)
 //=======================================================================
 void LoadAssets()
 {
-	//// Loading Model files
+	//Loading Model files
 	//model_house.Load("Models/house/house.3ds");
 	//model_tree.Load("Models/tree/Tree1.3ds");
 
-	//// Loading texture files
+	//Loading t		exture files
 	loadBMP(&tex, "textures/Space/space2.bmp", true);
 	
+}
+
+//=======================================================================
+// Animate Function
+//=======================================================================
+void anim()
+{
+	rotY += 10;
+	glutPostRedisplay();	//Re-draw scene 
 }
 
 //=======================================================================
@@ -462,11 +482,11 @@ void main(int argc, char** argv)
 
 	glutReshapeFunc(myReshape);
 
+	glutIdleFunc(anim);
+
 	myInit();
 
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, tex_Mars.texture[0]);
-	glBindTexture(GL_TEXTURE_2D, tex_Earth.texture[0]);
 	
 	LoadAssets();
 	glEnable(GL_DEPTH_TEST);
