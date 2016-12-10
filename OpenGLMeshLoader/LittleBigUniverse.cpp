@@ -57,7 +57,7 @@ char title[] = "Little Big Universe";
 GLdouble fovy = 45.0;
 GLdouble aspectRatio = (GLdouble)WIDTH / (GLdouble)HEIGHT;
 GLdouble zNear = 0.1;
-GLdouble zFar = 100;
+GLdouble zFar = 4000;
 
 class Vector
 {
@@ -196,6 +196,7 @@ void myDisplay(void)
 	glLightfv(GL_LIGHT0, GL_AMBIENT, lightIntensity);
 
 
+	glEnable(GL_TEXTURE_2D);
 	// Draw Tree Model
 	//glPushMatrix();
 	//glTranslatef(10, 0, 0);
@@ -216,7 +217,7 @@ void myDisplay(void)
 	glBindTexture(GL_TEXTURE_2D, tex);
 	gluQuadricTexture(qobj,true);
 	gluQuadricNormals(qobj,GL_SMOOTH);
-	gluSphere(qobj,100,100,100);
+	gluSphere(qobj,500,100,100);
 	gluDeleteQuadric(qobj);
 	
 	glPopMatrix();
@@ -330,6 +331,7 @@ void LoadAssets()
 	//// Loading texture files
 	//tex_ground.Load("Textures/ground.bmp");
 	//loadBMP(&tex, "Textures/sky4-jpg.bmp", true);
+	loadBMP(&tex, "textures/Space/space2.bmp", true);
 }
 
 //=======================================================================
