@@ -3,10 +3,23 @@
 #include "TextureBuilder.h"
 #include "Model_3DS.h"
 #include "GLTexture.h"
+#include <string>
 #include <glut.h>
 
 int WIDTH = 1280;
 int HEIGHT = 720;
+
+//Textures
+GLuint tex;
+GLTexture tex_Mars;
+GLTexture tex_Earth;
+GLTexture tex_Mercury;
+GLTexture tex_Jupiter;
+GLTexture tex_Neptune;
+GLTexture tex_Saturn;
+GLTexture tex_Uranus;
+GLTexture tex_Venus;
+GLTexture tex_Pluto;
 
 struct Moon {
 	double radius;
@@ -15,42 +28,146 @@ struct Moon {
 };
 
 struct Planet {
+	std::string name;
 	double radius;
-	char texture[];
+	std::string texture;
 	//Moon moons[] = { {10,10,""} };
 }Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto; //Yes, Pluto is a f**king planet !
 
 void initializePlanets() {
+	Mercury.name = "Mercury";
 	Mercury.radius = 24;
+	Mercury.texture = "textures/Mercury/mercurymap.bmp";
+
 	Venus.radius = 60;
+	Venus.name = "Venus";
+	Venus.texture = "textures/Venus/venusmap.bmp";
+
 	Earth.radius = 63;
+	Earth.name = "Earth";
+	Earth.texture = "textures/Earth/earth.bmp";
+
 	Mars.radius = 34;
+	Mars.name = "Mars";
+	Mars.texture = "textures/Mars/marsmap1k.bmp";
+
 	Jupiter.radius = 700;
+	Jupiter.name = "Jupiter";
+	Jupiter.texture = "textures/Jupiter/jupiter.bmp";
+
 	Saturn.radius = 582;
+	Saturn.name = "Saturn";
+	Saturn.texture = "textures/Saturn/saturnmap.bmp";
+
 	Uranus.radius = 253;
+	Uranus.name = "Uranus";
+	Uranus.texture = "textures/Uranus/uranusmap.bmp";
+
 	Neptune.radius = 246;
+	Neptune.name = "Neptune";
+	Neptune.texture = "textures/Neptune/neptunemap.bmp";
+
 	Pluto.radius = 15; 
+	Pluto.name = "Pluto";
+	Pluto.texture = "textures/Pluto/plutomap2k.bmp";
 }
 
 void drawPlanet(Planet planet, int x, int y, int z) {
+
+//	const char *cstr = (planet.texture).c_str();
+
+	if(planet.name == "Mars")
+		tex_Mars.Load("textures/Mars/marsmap1k.bmp");
+	else if(planet.name == "Earth")
+		tex_Earth.Load("textures/Earth/earth.bmp");
+	else if(planet.name == "Mercury")
+		tex_Mercury.Load("textures/Mercury/mercurymap.bmp");
+	else if(planet.name == "Jupiter")
+		tex_Jupiter.Load("textures/Jupiter/jupiter.bmp");
+	else if(planet.name == "Neptune")
+		tex_Neptune.Load("textures/Neptune/neptunemap.bmp");
+	else if (planet.name == "Pluto")
+		tex_Pluto.Load("textures/Pluto/plutomap2k.bmp");
+	else if(planet.name == "Saturn")
+		tex_Saturn.Load("textures/Saturn/saturnmap.bmp");
+	else if (planet.name == "Uranus")
+		tex_Uranus.Load("textures/Uranus/uranusmap.bmp");
+	else if (planet.name == "Venus")
+		tex_Venus.Load("textures/Venus/venusmap.bmp");
+	
 	glPushMatrix();
 	glTranslated(x, y, z);
-	glutSolidSphere(planet.radius, 50, 50);
+	GLUquadricObj *quadric;
+	quadric = gluNewQuadric();
+	gluQuadricDrawStyle(quadric, GLU_FILL);
+	gluQuadricTexture(quadric, 1);
+	gluSphere(quadric, planet.radius, 100, 100);
 	glPopMatrix();
 }
 
 void drawPlanets() {
-	drawPlanet(Mercury, 100, 0, 0);
-	drawPlanet(Mercury, 100, 0, 0);
-	drawPlanet(Mercury, 100, 0, 0);
-	drawPlanet(Mercury, 100, 0, 0);
-	drawPlanet(Mercury, 100, 0, 0);
-	drawPlanet(Mercury, 100, 0, 0);
-	drawPlanet(Mercury, 100, 0, 0);
+
+	glRotated(45,0,1,0);
+	glRotated(-90, 1, 0, 0);
+
+	//mars
+	glPushMatrix();
+	Mars.radius = 5;
+	drawPlanet(Mars, -15, 0, 0);
+	glPopMatrix();
+
+	//earth
+	glPushMatrix();
+	Earth.radius = 5;
+	drawPlanet(Earth, 0, 0, 0);
+	glPopMatrix();
+
+	//mercury
+	//glPushMatrix();
+	//Mercury.radius = 5;
+	//drawPlanet(Mercury, 15, 0, 0);
+	//glPopMatrix();
+
+	////jupiter
+	glPushMatrix();
+	Jupiter.radius = 5;
+	drawPlanet(Jupiter, 15, 0, 0);
+	glPopMatrix();
+
+	////neptune
+	/*glPushMatrix();
+	Neptune.radius = 5;
+	drawPlanet(Neptune, 15, 0, 0);
+	glPopMatrix();*/
+
+	////pluto
+	//glPushMatrix();
+	//Pluto.radius = 5;
+	//drawPlanet(Pluto, 15, 0, 0);
+	//glPopMatrix();
+
+	////saturn
+	/*glPushMatrix();
+	Saturn.radius = 5;
+	drawPlanet(Saturn, 15, 0, 0);
+	glPopMatrix();*/
+
+	////uranus
+	/*glPushMatrix();
+	Uranus.radius = 5;
+	drawPlanet(Uranus, 15, 0, 0);
+	glPopMatrix();*/
+
+	//venus
+	/*glPushMatrix();
+	Venus.radius = 5;
+	drawPlanet(Venus, 15, 0, 0);
+	glPopMatrix();*/
+
 }
 
 
-GLuint tex;
+//GLuint tex;
 char title[] = "Little Big Universe";
 
 // 3D Projection Options
@@ -87,9 +204,6 @@ int cameraZoom = 0;
 // An Example of how to create and use models (Model Variables)
 Model_3DS model_house;
 Model_3DS model_tree;
-
-// Textures
-GLTexture tex_ground;
 
 //=======================================================================
 // Lighting Configuration Function
@@ -179,8 +293,6 @@ void myInit(void)
 	glEnable(GL_NORMALIZE);
 }
 
-
-
 //=======================================================================
 // Display Function
 //=======================================================================
@@ -188,15 +300,11 @@ void myDisplay(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-
-	GLfloat lightIntensity[] = { 0.7, 0.7, 0.7, 1.0f };
+	/*GLfloat lightIntensity[] = { 0.7, 0.7, 0.7, 1.0f };
 	GLfloat lightPosition[] = {0.0f, 100.0f, 0.0f, 0.0f };
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, lightIntensity);
-
-
-	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_TEXTURE_2D);*/
 	// Draw Tree Model
 	//glPushMatrix();
 	//glTranslatef(10, 0, 0);
@@ -204,12 +312,11 @@ void myDisplay(void)
 	//model_tree.Draw();
 	//glPopMatrix();
 
-	
+	initializePlanets();
+	drawPlanets();
 
-
-//sky box
-	glPushMatrix();
-
+	//sky box
+	/*glPushMatrix();
 	GLUquadricObj * qobj;
 	qobj = gluNewQuadric();
 	glTranslated(50,0,0);
@@ -219,11 +326,8 @@ void myDisplay(void)
 	gluQuadricNormals(qobj,GL_SMOOTH);
 	gluSphere(qobj,500,100,100);
 	gluDeleteQuadric(qobj);
-	
-	glPopMatrix();
-	
-	
-	
+	glPopMatrix();*/
+
 	glutSwapBuffers();
 }
 
@@ -329,9 +433,8 @@ void LoadAssets()
 	//model_tree.Load("Models/tree/Tree1.3ds");
 
 	//// Loading texture files
-	//tex_ground.Load("Textures/ground.bmp");
-	//loadBMP(&tex, "Textures/sky4-jpg.bmp", true);
 	loadBMP(&tex, "textures/Space/space2.bmp", true);
+	
 }
 
 //=======================================================================
@@ -361,8 +464,12 @@ void main(int argc, char** argv)
 
 	myInit();
 
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, tex_Mars.texture[0]);
+	glBindTexture(GL_TEXTURE_2D, tex_Earth.texture[0]);
+	
 	LoadAssets();
-		glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	glEnable(GL_NORMALIZE);
