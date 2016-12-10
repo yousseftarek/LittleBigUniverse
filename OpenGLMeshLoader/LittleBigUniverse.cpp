@@ -8,6 +8,10 @@
 int WIDTH = 1280;
 int HEIGHT = 720;
 
+double rotSunX, rotSunY, rotSunZ;
+
+GLTexture tex_sun;
+
 struct Moon {
 	double radius;
 	double distanceFromPlanet;
@@ -20,6 +24,10 @@ struct Planet {
 	//Moon moons[] = { {10,10,""} };
 }Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto; //Yes, Pluto is a f**king planet !
 
+struct Star {
+	double radius;
+}TheSun;
+
 void initializePlanets() {
 	Mercury.radius = 24;
 	Venus.radius = 60;
@@ -30,6 +38,8 @@ void initializePlanets() {
 	Uranus.radius = 253;
 	Neptune.radius = 246;
 	Pluto.radius = 15; 
+
+	TheSun.radius = 400;
 }
 
 void drawPlanet(Planet planet, int x, int y, int z) {
@@ -37,6 +47,30 @@ void drawPlanet(Planet planet, int x, int y, int z) {
 	glTranslated(x, y, z);
 	glutSolidSphere(planet.radius, 50, 50);
 	glPopMatrix();
+}
+
+void drawSun(Star sun) {
+	glPushMatrix();
+	
+	glEnable(GL_LIGHT1);
+
+	GLfloat ambient[] = { 0.8f, 0.8f, 0.8, 1.0f };
+	glLightfv(GL_LIGHT1, GL_AMBIENT, ambient);
+
+	GLfloat sun_material[] = { 0.8,0.8,0.8, 1};
+	glMaterialfv(GL_FRONT, GL_EMISSION, sun_material);
+
+	tex_sun.Load("Textures/Sun/sun.bmp");
+	glRotated(rotSunY, 0,1,0);
+	glRotated(90, 1, 0, 0);
+	GLUquadricObj * qobj;
+	qobj = gluNewQuadric();
+	gluQuadricDrawStyle(qobj, GLU_FILL);
+	gluQuadricTexture(qobj, 1);
+	gluSphere(qobj, sun.radius, 100, 100);
+	glPopMatrix();
+
+
 }
 
 void drawPlanets() {
@@ -57,7 +91,7 @@ char title[] = "Little Big Universe";
 GLdouble fovy = 45.0;
 GLdouble aspectRatio = (GLdouble)WIDTH / (GLdouble)HEIGHT;
 GLdouble zNear = 0.1;
-GLdouble zFar = 4000;
+GLdouble zFar = 10000;
 
 class Vector
 {
@@ -78,7 +112,7 @@ public:
 };
 
 //Initialization of vectors controlling the camera.
-Vector Eye(20, 5, 20);
+Vector Eye(2500,2500,2500);
 Vector At(0, 0, 0);
 Vector Up(0, 1, 0);
 
@@ -170,9 +204,11 @@ void myInit(void)
 	// UP (ux, uy, uz):  denotes the upward orientation of the camera.							 //
 	//*******************************************************************************************//
 
-	InitLightSource();
+	//InitLightSource();
 
-	InitMaterial();
+	glEnable(GL_LIGHTING);
+
+	//InitMaterial();
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -195,6 +231,7 @@ void myDisplay(void)
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, lightIntensity);
 
+	glEnable(GL_LIGHTING);
 
 	glEnable(GL_TEXTURE_2D);
 	// Draw Tree Model
@@ -203,8 +240,9 @@ void myDisplay(void)
 	//glScalef(0.7, 0.7, 0.7);
 	//model_tree.Draw();
 	//glPopMatrix();
+	initializePlanets();
 
-	
+	drawSun(TheSun);
 
 
 //sky box
@@ -212,12 +250,11 @@ void myDisplay(void)
 
 	GLUquadricObj * qobj;
 	qobj = gluNewQuadric();
-	glTranslated(50,0,0);
-	glRotated(90,1,0,1);
+	glRotated(90,1,0,0);
 	glBindTexture(GL_TEXTURE_2D, tex);
 	gluQuadricTexture(qobj,true);
 	gluQuadricNormals(qobj,GL_SMOOTH);
-	gluSphere(qobj,500,100,100);
+	gluSphere(qobj,5000,100,100);
 	gluDeleteQuadric(qobj);
 	
 	glPopMatrix();
@@ -332,6 +369,17 @@ void LoadAssets()
 	//tex_ground.Load("Textures/ground.bmp");
 	//loadBMP(&tex, "Textures/sky4-jpg.bmp", true);
 	loadBMP(&tex, "textures/Space/space2.bmp", true);
+	
+}
+
+void anim() {
+	if (rotSunY < 360) {
+		rotSunY += 1;
+	}
+	else {
+		rotSunY = 0;
+	}
+	glutPostRedisplay();
 }
 
 //=======================================================================
@@ -345,7 +393,7 @@ void main(int argc, char** argv)
 
 	glutInitWindowSize(WIDTH, HEIGHT);
 
-	glutInitWindowPosition(100, 150);
+	glutInitWindowPosition(0, 0);
 
 	glutCreateWindow(title);
 
@@ -359,6 +407,8 @@ void main(int argc, char** argv)
 
 	glutReshapeFunc(myReshape);
 
+	glutIdleFunc(anim);
+
 	myInit();
 
 	LoadAssets();
@@ -369,6 +419,8 @@ void main(int argc, char** argv)
 	glEnable(GL_COLOR_MATERIAL);
 
 	glShadeModel(GL_SMOOTH);
+
+	glColor3f(0, 0, 0);
 
 	glutMainLoop();
 }

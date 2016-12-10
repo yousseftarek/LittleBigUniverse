@@ -1,17 +1,9 @@
-﻿Build started 10-Dec-2016 1:20:55 PM.
+﻿Build started 10-Dec-2016 7:32:05 PM.
      1>Project "E:\University\Semester 7\Graphics\Project\LittleBigUniverse\OpenGLMeshLoader\OpenGLMeshLoader.vcxproj" on node 2 (Build target(s)).
      1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (OpenGLMeshLoader.vcxproj).  This can lead to incorrect clean and rebuild behavior.
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I"E:\University\Semester 7\Graphics\Project\LittleBigUniverse\OpenGLMeshLoader\Debug\\.." /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt LittleBigUniverse.cpp
          LittleBigUniverse.cpp
-     1>e:\university\semester 7\graphics\project\littlebiguniverse\openglmeshloader\texturebuilder.h(27): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-     1>e:\university\semester 7\graphics\project\littlebiguniverse\openglmeshloader\texturebuilder.h(28): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-     1>e:\university\semester 7\graphics\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(14): warning C4200: nonstandard extension used: zero-sized array in struct/union
-         e:\university\semester 7\graphics\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(14): note: Cannot generate copy-ctor or copy-assignment operator when UDT contains a zero-sized array
-     1>e:\university\semester 7\graphics\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(19): warning C4200: nonstandard extension used: zero-sized array in struct/union
-         e:\university\semester 7\graphics\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(19): note: Cannot generate copy-ctor or copy-assignment operator when UDT contains a zero-sized array
-     1>e:\university\semester 7\graphics\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(107): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
-     1>e:\university\semester 7\graphics\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(193): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\University\Semester 7\Graphics\Project\LittleBigUniverse\OpenGLMeshLoader\Debug\LittleBigUniverse.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"E:\University\Semester 7\Graphics\Project\LittleBigUniverse\OpenGLMeshLoader\Debug\\.." glut32.lib legacy_stdio_definitions.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"E:\University\Semester 7\Graphics\Project\LittleBigUniverse\OpenGLMeshLoader\Debug\LittleBigUniverse.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\University\Semester 7\Graphics\Project\LittleBigUniverse\OpenGLMeshLoader\Debug\LittleBigUniverse.lib" /MACHINE:X86 Debug\GLTexture.obj
          Debug\Model_3DS.obj
@@ -22,4 +14,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:02.69
+Time Elapsed 00:00:01.80
