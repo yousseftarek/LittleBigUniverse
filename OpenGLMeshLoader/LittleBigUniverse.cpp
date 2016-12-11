@@ -6,10 +6,22 @@
 #include <string>
 #include <glut.h>
 
+#define degree 0.0174533
+#define DEG2RAD 3.14159/180.0
+
 int WIDTH = 1280;
 int HEIGHT = 720;
 
 double rotY = 0;
+float angleMercury = 0;
+float angleVenus = 0;
+float angleEarth = 0;
+float angleMars = 0;
+float angleJupiter = 0;
+float angleUranus = 0;
+float angleSaturn = 0;
+float angleNeptune = 0;
+float anglePluto = 0;
 
 //Textures
 GLuint tex;
@@ -22,6 +34,8 @@ GLTexture tex_Saturn;
 GLTexture tex_Uranus;
 GLTexture tex_Venus;
 GLTexture tex_Pluto;
+
+GLTexture tex_SaturnRings;
 
 struct Moon {
 	double radius;
@@ -74,33 +88,119 @@ void initializePlanets() {
 	Pluto.texture = "textures/Pluto/plutomap2k.bmp";
 }
 
+void DrawEllipse(float radiusX, float radiusY)
+{
+	int i;
+
+	glBegin(GL_LINE_LOOP);
+
+	for (i = 0; i<360; i++)
+	{
+		float rad = i*DEG2RAD;
+		glVertex3f(cos(rad)*radiusX, 0,
+			sin(rad)*radiusY);
+	}
+
+	glEnd();
+}
+
+void drawRings(int inner, int outer, int angle, char* texture) {
+	//saturn rings
+	tex_SaturnRings.Load(texture);
+	glPushMatrix();
+	glRotated(angle, 0, 0, 1);
+	GLUquadricObj * qobj;
+	qobj = gluNewQuadric();
+	gluQuadricDrawStyle(qobj, GLU_FILL);
+	gluQuadricTexture(qobj, 1);
+	gluDisk(qobj, inner, outer, 100, 100);
+	glPopMatrix();
+}
+
+
 void drawPlanet(Planet planet, int x, int y, int z, double rotFactor) {
 
 	char *texturePath = &planet.texture[0];
+	float radOne = 10.0;
+	float radTwo = 20.0;
+	float angle = 0;
 
-	if(planet.name == "Mars")
+	if (planet.name == "Mars") {
 		tex_Mars.Load(texturePath);
-	else if(planet.name == "Earth")
+		radTwo = 227;
+		radOne = radTwo / 2;
+		angleMars += degree/2;
+		angle = angleMars;
+	}
+	else if (planet.name == "Earth") {
 		tex_Earth.Load(texturePath);
-	else if(planet.name == "Mercury")
+		radTwo = 149;
+		radOne = radTwo / 2;
+		angleEarth += degree;
+		angle = angleEarth;
+	}
+	else if (planet.name == "Mercury") {
 		tex_Mercury.Load(texturePath);
-	else if(planet.name == "Jupiter")
+		radTwo = 58;
+		radOne = radTwo / 2;
+		angleMercury += degree*4.14772727;
+		angle = angleMercury;
+	}
+	else if (planet.name == "Jupiter") {
 		tex_Jupiter.Load(texturePath);
-	else if(planet.name == "Neptune")
+		radTwo = 778;
+		radOne = radTwo/2;
+		angleJupiter += degree;
+		angle = angleJupiter;
+	}
+	else if (planet.name == "Neptune") {
 		tex_Neptune.Load(texturePath);
-	else if (planet.name == "Pluto")
+		radTwo = 4498;
+		radOne = radTwo / 2;
+		angleNeptune += degree*0.00608;
+		angle = angleNeptune;
+	}
+	else if (planet.name == "Pluto") {
 		tex_Pluto.Load(texturePath);
-	else if(planet.name == "Saturn")
+		radTwo = 5906;
+		radOne = radTwo / 2;
+		anglePluto += degree*0.0040555;
+		angle = anglePluto;
+	}
+	else if (planet.name == "Saturn") {
 		tex_Saturn.Load(texturePath);
-	else if (planet.name == "Uranus")
+		radTwo = 1426;
+		radOne = radTwo / 2;
+		angleSaturn += degree*0.0331818;
+		angle = angleSaturn;
+	}
+	else if (planet.name == "Uranus") {
 		tex_Uranus.Load(texturePath);
-	else if (planet.name == "Venus")
+		radTwo = 2870;
+		radOne = radTwo / 2;
+		angleUranus += degree*0.0117741;
+		angle = angleUranus;
+	}
+	else if (planet.name == "Venus") {
 		tex_Venus.Load(texturePath);
-	
+		radTwo = 108;
+		radOne = radTwo / 2;
+		angleVenus += degree*1.622222;
+		angle = angleVenus;
+	}
+
 	glPushMatrix();
-	glTranslated(x, y, z);
-	glTranslated(-20, 0, 0);
-	glRotated(rotY * rotFactor, 0, 0, 1);
+	//ellipse path
+	float planetx = 0;
+	float planety = 0;
+	planetx = radOne * cos(angle);
+	planety = radTwo * sin(angle);
+	DrawEllipse(radOne, radTwo);
+	glTranslated(planetx, 0, planety);
+
+	//rotation 7awalen nafsy
+	glRotated(rotY * rotFactor, 0, 1, 0);
+	glRotated(-90, 1, 0, 0);
 	glScaled(0.05, 0.05, 0.05);
 
 	GLUquadricObj *quadric;
@@ -108,8 +208,28 @@ void drawPlanet(Planet planet, int x, int y, int z, double rotFactor) {
 	gluQuadricDrawStyle(quadric, GLU_FILL);
 	gluQuadricTexture(quadric, 1);
 	gluSphere(quadric, planet.radius, 100, 100);
+
+	if (planet.name == "Saturn") {
+		//rings
+		glPushMatrix();
+		drawRings(620,700, 45,"textures/Saturn/Rings/saturnringcolor.bmp");
+		drawRings(730,850, 90,"textures/Saturn/Rings/saturnringcolor.bmp");
+		drawRings(880,1000, 125,"textures/Saturn/Rings/saturnringcolor.bmp");
+		glPopMatrix();
+	}
+
+	if (planet.name == "Uranus") {
+		//rings
+		glPushMatrix();
+		drawRings(260, 290, 45, "textures/Uranus/Rings/rings.bmp");
+		drawRings(320, 360, 90, "textures/Uranus/Rings/rings.bmp");
+		drawRings(380, 420, 125, "textures/Uranus/Rings/rings.bmp");
+		glPopMatrix();
+	}
 	glPopMatrix();
+
 }
+
 
 void drawPlanets() {
 
@@ -118,8 +238,6 @@ void drawPlanets() {
 	int scalingFactor = 1000;
 
 	glPushMatrix();
-	glRotated(45, 1, 1, 0);
-	glRotated(-90, 1, 0, 0);
 
 	//mercury
 	glPushMatrix();
@@ -198,7 +316,7 @@ public:
 };
 
 //Initialization of vectors controlling the camera.
-Vector Eye(20, 5, 20);
+Vector Eye(0, 900, 900);
 Vector At(0, 0, 0);
 Vector Up(0, 1, 0);
 
