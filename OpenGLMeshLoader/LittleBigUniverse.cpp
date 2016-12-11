@@ -4,7 +4,13 @@
 #include "Model_3DS.h"
 #include "GLTexture.h"
 #include <string>
+#include <iostream>
 #include <glut.h>
+#include <math.h>
+
+void initializeSpace(void);
+
+using namespace std;
 
 #define degree 0.0174533
 #define DEG2RAD 3.14159/180.0
@@ -34,8 +40,14 @@ GLTexture tex_Saturn;
 GLTexture tex_Uranus;
 GLTexture tex_Venus;
 GLTexture tex_Pluto;
-
 GLTexture tex_SaturnRings;
+
+float xpos = 0, ypos = 0, zpos = 0, xrot = 0, yrot = 0, angle = 0.0;
+float lastx, lasty;
+
+double rotSunX, rotSunY, rotSunZ;
+
+GLTexture tex_sun;
 
 struct Moon {
 	double radius;
@@ -49,6 +61,12 @@ struct Planet {
 	std::string texture;
 	//Moon moons[] = { {10,10,""} };
 }Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto; //Yes, Pluto is a f**king planet !
+
+
+struct Star {
+	double radius;
+}TheSun;
+
 
 void initializePlanets() {
 	Mercury.radius = 24;
@@ -86,6 +104,8 @@ void initializePlanets() {
 	Pluto.radius = 15; 
 	Pluto.name = "Pluto";
 	Pluto.texture = "textures/Pluto/plutomap2k.bmp";
+
+	TheSun.radius = 50;
 }
 
 void DrawEllipse(float radiusX, float radiusY)
@@ -116,7 +136,6 @@ void drawRings(int inner, int outer, int angle, char* texture) {
 	gluDisk(qobj, inner, outer, 100, 100);
 	glPopMatrix();
 }
-
 
 void drawPlanet(Planet planet, int x, int y, int z, double rotFactor) {
 
@@ -193,9 +212,9 @@ void drawPlanet(Planet planet, int x, int y, int z, double rotFactor) {
 	//ellipse path
 	float planetx = 0;
 	float planety = 0;
-	planetx = radOne * cos(angle);
-	planety = radTwo * sin(angle);
-	DrawEllipse(radOne, radTwo);
+	planetx = radOne * 2 *cos(angle);
+	planety = radTwo * 2 * sin(angle);
+	DrawEllipse(radOne *2 , radTwo*2);
 	glTranslated(planetx, 0, planety);
 
 	//rotation 7awalen nafsy
@@ -230,6 +249,29 @@ void drawPlanet(Planet planet, int x, int y, int z, double rotFactor) {
 
 }
 
+void drawSun(Star sun) {
+	glPushMatrix();
+	
+	glEnable(GL_LIGHT1);
+
+	GLfloat ambient[] = { 0.8f, 0.8f, 0.8, 1.0f };
+	glLightfv(GL_LIGHT1, GL_AMBIENT, ambient);
+
+	GLfloat sun_material[] = { 0.8,0.8,0.8, 1};
+	glMaterialfv(GL_FRONT, GL_EMISSION, sun_material);
+
+	tex_sun.Load("Textures/Sun/sun.bmp");
+	glRotated(rotSunY, 0,1,0);
+	glRotated(90, 1, 0, 0);
+	GLUquadricObj * qobj;
+	qobj = gluNewQuadric();
+	gluQuadricDrawStyle(qobj, GLU_FILL);
+	gluQuadricTexture(qobj, 1);
+	gluSphere(qobj, sun.radius, 100, 100);
+	glPopMatrix();
+
+
+}
 
 void drawPlanets() {
 
@@ -295,7 +337,7 @@ char title[] = "Little Big Universe";
 GLdouble fovy = 45.0;
 GLdouble aspectRatio = (GLdouble)WIDTH / (GLdouble)HEIGHT;
 GLdouble zNear = 0.1;
-GLdouble zFar = 4000;
+GLdouble zFar = 50000;
 
 class Vector
 {
@@ -316,7 +358,7 @@ public:
 };
 
 //Initialization of vectors controlling the camera.
-Vector Eye(0, 900, 900);
+Vector Eye(0,0,500);
 Vector At(0, 0, 0);
 Vector Up(0, 1, 0);
 
@@ -405,9 +447,11 @@ void myInit(void)
 	// UP (ux, uy, uz):  denotes the upward orientation of the camera.							 //
 	//*******************************************************************************************//
 
-	InitLightSource();
+	//InitLightSource();
 
-	InitMaterial();
+	glEnable(GL_LIGHTING);
+
+	//InitMaterial();
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -417,6 +461,7 @@ void myInit(void)
 //=======================================================================
 // Display Function
 //=======================================================================
+
 void myDisplay(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -427,49 +472,87 @@ void myDisplay(void)
 	glLightfv(GL_LIGHT0, GL_AMBIENT, lightIntensity);
 	glEnable(GL_TEXTURE_2D);*/
 	//Draw Tree Model
+	glEnable(GL_LIGHTING);
+	glEnable(GL_TEXTURE_2D);
+	// Draw Tree Model
 	//glPushMatrix();
 	//glTranslatef(10, 0, 0);
 	//glScalef(0.7, 0.7, 0.7);
 	//model_tree.Draw();
 	//glPopMatrix();
-
-	initializePlanets();
-	drawPlanets();
 	
+	glPushMatrix();
+	glRotatef(xrot, 1.0, 0.0, 0.0);
+	glRotatef(yrot, 0.0, 1.0, 0.0);  //rotate our camera on the 
+									 //y - axis(up and down)
+	glTranslated(-xpos, 0.0f, -zpos); //translate the screen
+									  //to the position of our camera
+	drawSun(TheSun);
+	drawPlanets();
 	//sky box
-	/*glPushMatrix();
-	GLUquadricObj * qobj;
-	qobj = gluNewQuadric();
-	glTranslated(50,0,0);
-	glRotated(90,1,0,1);
-	glBindTexture(GL_TEXTURE_2D, tex);
-	gluQuadricTexture(qobj,true);
-	gluQuadricNormals(qobj,GL_SMOOTH);
-	gluSphere(qobj,500,100,100);
-	gluDeleteQuadric(qobj);
-	glPopMatrix();*/
-
+	initializeSpace();
+	glPopMatrix();
+	
 	glutSwapBuffers();
 }
 
 //=======================================================================
 // Keyboard Function
 //=======================================================================
-void myKeyboard(unsigned char button, int x, int y)
+void myKeyboard(unsigned char key, int x, int y)
 {
-	switch (button)
+
+	if (key == 'q')
 	{
-	case 'w':
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		break;
-	case 'r':
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		break;
-	case 27:
+		xrot += 1;
+		if (xrot >360) xrot -= 360;
+	}
+
+	if (key == 'z')
+	{
+		xrot -= 1;
+		if (xrot < -360) xrot += 360;
+	}
+
+	if (key == 'w')
+	{
+		float xrotrad, yrotrad;
+		yrotrad = (yrot / 180 * 3.141592654f);
+		xrotrad = (xrot / 180 * 3.141592654f);
+		xpos += 10* float(sin(yrotrad));
+		zpos -= 10 * float(cos(yrotrad));
+		ypos -= 10 * float(sin(xrotrad));
+	}
+
+	if (key == 's')
+	{
+		float xrotrad, yrotrad;
+		yrotrad = (yrot / 180 * 3.141592654f);
+		xrotrad = (xrot / 180 * 3.141592654f);
+		xpos -= 10 * float(sin(yrotrad));
+		zpos += 10 * float(cos(yrotrad));
+		ypos += 10 * float(sin(xrotrad));
+	}
+
+	if (key == 'd')
+	{
+		float yrotrad;
+		yrotrad = (yrot / 180 * 3.141592654f);
+		xpos += 10 * float(cos(yrotrad)) * 0.2;
+		zpos += 10 * float(sin(yrotrad)) * 0.2;
+	}
+
+	if (key == 'a')
+	{
+		float yrotrad;
+		yrotrad = (yrot / 180 * 3.141592654f);
+		xpos -= 10 * float(cos(yrotrad)) * 0.2;
+		zpos -= 10 * float(sin(yrotrad)) * 0.2;
+	}
+
+	if (key == 27)
+	{
 		exit(0);
-		break;
-	default:
-		break;
 	}
 	glutPostRedisplay();
 }
@@ -507,14 +590,21 @@ void myMotion(int x, int y)
 //=======================================================================
 // Mouse Function
 //=======================================================================
-void myMouse(int button, int state, int x, int y)
+void myMouse(int x, int y)
 {
-	y = HEIGHT - y;
 
-	if (state == GLUT_DOWN)
-	{
-		cameraZoom = y;
-	}
+	int diffx = x - lastx; //check the difference between the 
+						   //current x and the last x position
+	int diffy = y - lasty; //check the difference between the 
+						   //current y and the last y position
+	lastx = x; //set lastx to the current x position
+	lasty = y; //set lasty to the current y position
+	xrot += (float)diffy; //set the xrot to xrot with the addition
+						  //of the difference in the y position
+	yrot += (float)diffx;    //set the xrot to yrot with the addition
+							 //of the difference in the x position
+
+	
 }
 
 //=======================================================================
@@ -554,16 +644,35 @@ void LoadAssets()
 
 	//Loading texture files
 	loadBMP(&tex, "textures/Space/space2.bmp", true);
+	
 }
 
-//=======================================================================
-// Animate Function
-//=======================================================================
-void anim()
-{
+void anim() {
+	if (rotSunY < 360) {
+		rotSunY += 1;
+	}
+	else {
+		rotSunY = 0;
+	}
 	rotY += 20;
-	glutPostRedisplay();	//Re-draw scene 
+	glutPostRedisplay();
 }
+
+void initializeSpace() {
+	glPushMatrix();
+
+	GLUquadricObj * qobj;
+	qobj = gluNewQuadric();
+	glRotated(90, 1, 0, 0);
+	glBindTexture(GL_TEXTURE_2D, tex);
+	gluQuadricTexture(qobj, true);
+	gluQuadricNormals(qobj, GL_SMOOTH);
+	gluSphere(qobj, 20000, 100, 100);
+	gluDeleteQuadric(qobj);
+
+	glPopMatrix();
+}
+
 
 //=======================================================================
 // Special Keys Function
@@ -598,7 +707,7 @@ void main(int argc, char** argv)
 
 	glutInitWindowSize(WIDTH, HEIGHT);
 
-	glutInitWindowPosition(100, 150);
+	glutInitWindowPosition(0, 0);
 
 	glutCreateWindow(title);
 
@@ -610,7 +719,7 @@ void main(int argc, char** argv)
 
 	glutMotionFunc(myMotion);
 
-	glutMouseFunc(myMouse);
+	glutPassiveMotionFunc(myMouse);
 
 	glutReshapeFunc(myReshape);
 
@@ -621,6 +730,8 @@ void main(int argc, char** argv)
 	glEnable(GL_TEXTURE_2D);
 	
 	LoadAssets();
+	initializePlanets();
+
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
@@ -628,6 +739,10 @@ void main(int argc, char** argv)
 	glEnable(GL_COLOR_MATERIAL);
 
 	glShadeModel(GL_SMOOTH);
+
+	
+
+	glColor3f(0, 0, 0);
 
 	glutMainLoop();
 }
