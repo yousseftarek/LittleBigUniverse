@@ -3,10 +3,19 @@
 #include "TextureBuilder.h"
 #include "Model_3DS.h"
 #include "GLTexture.h"
+#include <iostream>
 #include <glut.h>
+#include <math.h>
+
+void initializeSpace(void);
+
+using namespace std;
 
 int WIDTH = 1280;
 int HEIGHT = 720;
+
+float xpos = 0, ypos = 0, zpos = 0, xrot = 0, yrot = 0, angle = 0.0;
+float lastx, lasty;
 
 double rotSunX, rotSunY, rotSunZ;
 
@@ -28,19 +37,7 @@ struct Star {
 	double radius;
 }TheSun;
 
-void initializePlanets() {
-	Mercury.radius = 24;
-	Venus.radius = 60;
-	Earth.radius = 63;
-	Mars.radius = 34;
-	Jupiter.radius = 700;
-	Saturn.radius = 582;
-	Uranus.radius = 253;
-	Neptune.radius = 246;
-	Pluto.radius = 15; 
 
-	TheSun.radius = 400;
-}
 
 void drawPlanet(Planet planet, int x, int y, int z) {
 	glPushMatrix();
@@ -91,7 +88,7 @@ char title[] = "Little Big Universe";
 GLdouble fovy = 45.0;
 GLdouble aspectRatio = (GLdouble)WIDTH / (GLdouble)HEIGHT;
 GLdouble zNear = 0.1;
-GLdouble zFar = 10000;
+GLdouble zFar = 50000;
 
 class Vector
 {
@@ -112,7 +109,7 @@ public:
 };
 
 //Initialization of vectors controlling the camera.
-Vector Eye(2500,2500,2500);
+Vector Eye(0,0,2500);
 Vector At(0, 0, 0);
 Vector Up(0, 1, 0);
 
@@ -220,6 +217,7 @@ void myInit(void)
 //=======================================================================
 // Display Function
 //=======================================================================
+
 void myDisplay(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -240,26 +238,23 @@ void myDisplay(void)
 	//glScalef(0.7, 0.7, 0.7);
 	//model_tree.Draw();
 	//glPopMatrix();
-	initializePlanets();
+
+	glPushMatrix();
+
+	glRotatef(xrot, 1.0, 0.0, 0.0);
+
+	glRotatef(yrot, 0.0, 1.0, 0.0);  //rotate our camera on the 
+									 //y - axis(up and down)
+	glTranslated(-xpos, 0.0f, -zpos); //translate the screen
+									  //to the position of our camera
 
 	drawSun(TheSun);
 
 
 //sky box
-	glPushMatrix();
-
-	GLUquadricObj * qobj;
-	qobj = gluNewQuadric();
-	glRotated(90,1,0,0);
-	glBindTexture(GL_TEXTURE_2D, tex);
-	gluQuadricTexture(qobj,true);
-	gluQuadricNormals(qobj,GL_SMOOTH);
-	gluSphere(qobj,5000,100,100);
-	gluDeleteQuadric(qobj);
+	initializeSpace();
 	
 	glPopMatrix();
-	
-	
 	
 	glutSwapBuffers();
 }
@@ -267,22 +262,131 @@ void myDisplay(void)
 //=======================================================================
 // Keyboard Function
 //=======================================================================
-void myKeyboard(unsigned char button, int x, int y)
+void myKeyboard(unsigned char key, int x, int y)
 {
-	switch (button)
+
+	if (key == 'q')
 	{
-	case 'w':
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		break;
-	case 'r':
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		break;
-	case 27:
-		exit(0);
-		break;
-	default:
-		break;
+		xrot += 1;
+		if (xrot >360) xrot -= 360;
 	}
+
+	if (key == 'z')
+	{
+		xrot -= 1;
+		if (xrot < -360) xrot += 360;
+	}
+
+	if (key == 'w')
+	{
+		float xrotrad, yrotrad;
+		yrotrad = (yrot / 180 * 3.141592654f);
+		xrotrad = (xrot / 180 * 3.141592654f);
+		xpos += 100* float(sin(yrotrad));
+		zpos -= 100 * float(cos(yrotrad));
+		ypos -= 100 * float(sin(xrotrad));
+	}
+
+	if (key == 's')
+	{
+		float xrotrad, yrotrad;
+		yrotrad = (yrot / 180 * 3.141592654f);
+		xrotrad = (xrot / 180 * 3.141592654f);
+		xpos -= 100 * float(sin(yrotrad));
+		zpos += 100 * float(cos(yrotrad));
+		ypos += 100 * float(sin(xrotrad));
+	}
+
+	if (key == 'd')
+	{
+		float yrotrad;
+		yrotrad = (yrot / 180 * 3.141592654f);
+		xpos += 100 * float(cos(yrotrad)) * 0.2;
+		zpos += 100 * float(sin(yrotrad)) * 0.2;
+	}
+
+	if (key == 'a')
+	{
+		float yrotrad;
+		yrotrad = (yrot / 180 * 3.141592654f);
+		xpos -= 100 * float(cos(yrotrad)) * 0.2;
+		zpos -= 100 * float(sin(yrotrad)) * 0.2;
+	}
+
+	if (key == 27)
+	{
+		exit(0);
+	}
+
+
+	//double vectorX, vectorY, vectorZ, denominator, unitX, unitY, unitZ;
+
+	//switch (button)
+	//{
+	//case 'o':
+	//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//	break;
+	//case 'p':
+	//	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//	break;
+	//case 27:
+	//	exit(0);
+	//	break;
+	//case 'w':
+
+	//	/*if(Eye.x < 5000)
+	//	vectorX = At.x - Eye.x;
+	//	vectorY = At.y - Eye.y;
+	//	vectorZ = At.z - Eye.z;
+
+	//	denominator = sqrt((vectorX*vectorX) + (vectorY*vectorY) + (vectorZ*vectorZ));
+
+	//	if (denominator == 0) {
+	//		denominator = 1;
+	//	}
+
+	//	unitX = vectorX / denominator;
+	//	unitY = vectorY / denominator;
+	//	unitZ = vectorZ / denominator;
+
+	//	std::cout << unitX;
+
+	//	Eye.x = Eye.x - unitX * 10;
+	//	Eye.y = Eye.y - unitY * 10;
+	//	Eye.z = Eye.z - unitZ * 10;
+
+	//	gluLookAt(Eye.x, Eye.y, Eye.z, At.x, At.y, At.z, Up.x, Up.y, Up.z);
+
+	//	glutPostRedisplay();*/
+	//	break;
+	//case 's':
+
+	//	/*vectorX = At.x - Eye.x;
+	//	vectorY = At.y - Eye.y;
+	//	vectorZ = At.z - Eye.z;
+
+	//	denominator = sqrt((vectorX*vectorX) + (vectorY*vectorY) + (vectorZ*vectorZ));
+
+	//	if (denominator == 0) {
+	//		denominator = 1;
+	//	}
+
+	//	unitX = vectorX / denominator;
+	//	unitY = vectorY / denominator;
+	//	unitZ = vectorZ / denominator;
+
+	//	Eye.x += unitX * 1000;
+	//	Eye.y += unitY * 1000;
+	//	Eye.z += unitZ * 1000;
+
+	//	gluLookAt(Eye.x, Eye.y, Eye.z, At.x, At.y, At.z, Up.x, Up.y, Up.z);
+
+	//	glutPostRedisplay();*/
+
+	//	break;
+	//default:
+	//	break;
+	//}
 
 	glutPostRedisplay();
 }
@@ -320,14 +424,26 @@ void myMotion(int x, int y)
 //=======================================================================
 // Mouse Function
 //=======================================================================
-void myMouse(int button, int state, int x, int y)
+void myMouse(int x, int y)
 {
-	y = HEIGHT - y;
+
+	int diffx = x - lastx; //check the difference between the 
+						   //current x and the last x position
+	int diffy = y - lasty; //check the difference between the 
+						   //current y and the last y position
+	lastx = x; //set lastx to the current x position
+	lasty = y; //set lasty to the current y position
+	xrot += (float)diffy; //set the xrot to xrot with the addition
+						  //of the difference in the y position
+	yrot += (float)diffx;    //set the xrot to yrot with the addition
+							 //of the difference in the x position
+
+	/*y = HEIGHT - y;
 
 	if (state == GLUT_DOWN)
 	{
 		cameraZoom = y;
-	}
+	}*/
 }
 
 //=======================================================================
@@ -379,7 +495,40 @@ void anim() {
 	else {
 		rotSunY = 0;
 	}
+
+	
+	
+
 	glutPostRedisplay();
+}
+
+void initializePlanets() {
+	Mercury.radius = 24;
+	Venus.radius = 60;
+	Earth.radius = 63;
+	Mars.radius = 34;
+	Jupiter.radius = 700;
+	Saturn.radius = 582;
+	Uranus.radius = 253;
+	Neptune.radius = 246;
+	Pluto.radius = 15;
+
+	TheSun.radius = 400;
+}
+
+void initializeSpace() {
+	glPushMatrix();
+
+	GLUquadricObj * qobj;
+	qobj = gluNewQuadric();
+	glRotated(90, 1, 0, 0);
+	glBindTexture(GL_TEXTURE_2D, tex);
+	gluQuadricTexture(qobj, true);
+	gluQuadricNormals(qobj, GL_SMOOTH);
+	gluSphere(qobj, 20000, 100, 100);
+	gluDeleteQuadric(qobj);
+
+	glPopMatrix();
 }
 
 //=======================================================================
@@ -403,7 +552,7 @@ void main(int argc, char** argv)
 
 	glutMotionFunc(myMotion);
 
-	glutMouseFunc(myMouse);
+	glutPassiveMotionFunc(myMouse);
 
 	glutReshapeFunc(myReshape);
 
@@ -412,13 +561,18 @@ void main(int argc, char** argv)
 	myInit();
 
 	LoadAssets();
-		glEnable(GL_DEPTH_TEST);
+	initializePlanets();
+	
+	
+	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_COLOR_MATERIAL);
 
 	glShadeModel(GL_SMOOTH);
+
+	
 
 	glColor3f(0, 0, 0);
 
