@@ -319,75 +319,6 @@ void myKeyboard(unsigned char key, int x, int y)
 	}
 
 
-	//double vectorX, vectorY, vectorZ, denominator, unitX, unitY, unitZ;
-
-	//switch (button)
-	//{
-	//case 'o':
-	//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	//	break;
-	//case 'p':
-	//	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	//	break;
-	//case 27:
-	//	exit(0);
-	//	break;
-	//case 'w':
-
-	//	/*if(Eye.x < 5000)
-	//	vectorX = At.x - Eye.x;
-	//	vectorY = At.y - Eye.y;
-	//	vectorZ = At.z - Eye.z;
-
-	//	denominator = sqrt((vectorX*vectorX) + (vectorY*vectorY) + (vectorZ*vectorZ));
-
-	//	if (denominator == 0) {
-	//		denominator = 1;
-	//	}
-
-	//	unitX = vectorX / denominator;
-	//	unitY = vectorY / denominator;
-	//	unitZ = vectorZ / denominator;
-
-	//	std::cout << unitX;
-
-	//	Eye.x = Eye.x - unitX * 10;
-	//	Eye.y = Eye.y - unitY * 10;
-	//	Eye.z = Eye.z - unitZ * 10;
-
-	//	gluLookAt(Eye.x, Eye.y, Eye.z, At.x, At.y, At.z, Up.x, Up.y, Up.z);
-
-	//	glutPostRedisplay();*/
-	//	break;
-	//case 's':
-
-	//	/*vectorX = At.x - Eye.x;
-	//	vectorY = At.y - Eye.y;
-	//	vectorZ = At.z - Eye.z;
-
-	//	denominator = sqrt((vectorX*vectorX) + (vectorY*vectorY) + (vectorZ*vectorZ));
-
-	//	if (denominator == 0) {
-	//		denominator = 1;
-	//	}
-
-	//	unitX = vectorX / denominator;
-	//	unitY = vectorY / denominator;
-	//	unitZ = vectorZ / denominator;
-
-	//	Eye.x += unitX * 1000;
-	//	Eye.y += unitY * 1000;
-	//	Eye.z += unitZ * 1000;
-
-	//	gluLookAt(Eye.x, Eye.y, Eye.z, At.x, At.y, At.z, Up.x, Up.y, Up.z);
-
-	//	glutPostRedisplay();*/
-
-	//	break;
-	//default:
-	//	break;
-	//}
-
 	glutPostRedisplay();
 }
 
@@ -438,12 +369,7 @@ void myMouse(int x, int y)
 	yrot += (float)diffx;    //set the xrot to yrot with the addition
 							 //of the difference in the x position
 
-	/*y = HEIGHT - y;
-
-	if (state == GLUT_DOWN)
-	{
-		cameraZoom = y;
-	}*/
+	
 }
 
 //=======================================================================
@@ -495,9 +421,6 @@ void anim() {
 	else {
 		rotSunY = 0;
 	}
-
-	
-	
 
 	glutPostRedisplay();
 }

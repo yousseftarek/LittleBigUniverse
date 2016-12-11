@@ -1,4 +1,4 @@
-﻿Build started 11-Dec-2016 2:01:51 PM.
+﻿Build started 11-Dec-2016 2:47:36 PM.
      1>Project "E:\University\Semester 7\Graphics\Project\LittleBigUniverse\OpenGLMeshLoader\OpenGLMeshLoader.vcxproj" on node 2 (Build target(s)).
      1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (OpenGLMeshLoader.vcxproj).  This can lead to incorrect clean and rebuild behavior.
      1>ClCompile:
@@ -24,4 +24,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:04.77
+Time Elapsed 00:00:05.65
