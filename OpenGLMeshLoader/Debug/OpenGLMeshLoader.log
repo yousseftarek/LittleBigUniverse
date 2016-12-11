@@ -1,27 +1,12 @@
-﻿Build started 11-Dec-2016 2:47:36 PM.
-     1>Project "E:\University\Semester 7\Graphics\Project\LittleBigUniverse\OpenGLMeshLoader\OpenGLMeshLoader.vcxproj" on node 2 (Build target(s)).
-     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (OpenGLMeshLoader.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I"E:\University\Semester 7\Graphics\Project\LittleBigUniverse\OpenGLMeshLoader\Debug\\.." /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt LittleBigUniverse.cpp
-         LittleBigUniverse.cpp
-     1>e:\university\semester 7\graphics\project\littlebiguniverse\openglmeshloader\texturebuilder.h(27): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-     1>e:\university\semester 7\graphics\project\littlebiguniverse\openglmeshloader\texturebuilder.h(28): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-     1>e:\university\semester 7\graphics\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(27): warning C4200: nonstandard extension used: zero-sized array in struct/union
-         e:\university\semester 7\graphics\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(27): note: Cannot generate copy-ctor or copy-assignment operator when UDT contains a zero-sized array
-     1>e:\university\semester 7\graphics\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(32): warning C4200: nonstandard extension used: zero-sized array in struct/union
-         e:\university\semester 7\graphics\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(32): note: Cannot generate copy-ctor or copy-assignment operator when UDT contains a zero-sized array
-     1>e:\university\semester 7\graphics\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(54): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
-     1>e:\university\semester 7\graphics\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(57): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
-     1>e:\university\semester 7\graphics\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(138): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
-     1>e:\university\semester 7\graphics\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(227): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\University\Semester 7\Graphics\Project\LittleBigUniverse\OpenGLMeshLoader\Debug\LittleBigUniverse.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"E:\University\Semester 7\Graphics\Project\LittleBigUniverse\OpenGLMeshLoader\Debug\\.." glut32.lib legacy_stdio_definitions.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"E:\University\Semester 7\Graphics\Project\LittleBigUniverse\OpenGLMeshLoader\Debug\LittleBigUniverse.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\University\Semester 7\Graphics\Project\LittleBigUniverse\OpenGLMeshLoader\Debug\LittleBigUniverse.lib" /MACHINE:X86 Debug\GLTexture.obj
-         Debug\Model_3DS.obj
-         Debug\LittleBigUniverse.obj
-     1>GLTexture.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
-         OpenGLMeshLoader.vcxproj -> E:\University\Semester 7\Graphics\Project\LittleBigUniverse\OpenGLMeshLoader\Debug\LittleBigUniverse.exe
-     1>Done Building Project "E:\University\Semester 7\Graphics\Project\LittleBigUniverse\OpenGLMeshLoader\OpenGLMeshLoader.vcxproj" (Build target(s)).
-
-Build succeeded.
-
-Time Elapsed 00:00:05.65
+﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (OpenGLMeshLoader.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  LittleBigUniverse.cpp
+c:\users\rana\documents\7th semester (csen)\dmet 502 (computer graphics)\project\littlebiguniverse\openglmeshloader\texturebuilder.h(27): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\rana\documents\7th semester (csen)\dmet 502 (computer graphics)\project\littlebiguniverse\openglmeshloader\texturebuilder.h(28): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
+c:\users\rana\documents\7th semester (csen)\dmet 502 (computer graphics)\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(55): warning C4200: nonstandard extension used: zero-sized array in struct/union
+  c:\users\rana\documents\7th semester (csen)\dmet 502 (computer graphics)\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(55): note: This member will be ignored by a defaulted constructor or copy/move assignment operator
+c:\users\rana\documents\7th semester (csen)\dmet 502 (computer graphics)\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(257): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
+c:\users\rana\documents\7th semester (csen)\dmet 502 (computer graphics)\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(260): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
+c:\users\rana\documents\7th semester (csen)\dmet 502 (computer graphics)\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(384): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
+GLTexture.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
+  OpenGLMeshLoader.vcxproj -> C:\Users\Rana\Documents\7th Semester (CSEN)\DMET 502 (Computer Graphics)\Project\LittleBigUniverse\OpenGLMeshLoader\Debug\LittleBigUniverse.exe
+  OpenGLMeshLoader.vcxproj -> C:\Users\Rana\Documents\7th Semester (CSEN)\DMET 502 (Computer Graphics)\Project\LittleBigUniverse\OpenGLMeshLoader\Debug\LittleBigUniverse.pdb (Full PDB)
