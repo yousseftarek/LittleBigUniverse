@@ -9,6 +9,7 @@
 #include <math.h>
 
 void initializeSpace(void);
+bool canShowText(int, int);
 
 using namespace std;
 
@@ -29,6 +30,8 @@ float angleSaturn = 0;
 float angleNeptune = 0;
 float anglePluto = 0;
 
+bool showText = true;
+
 //Textures
 GLuint tex;
 GLTexture tex_Mars;
@@ -41,13 +44,12 @@ GLTexture tex_Uranus;
 GLTexture tex_Venus;
 GLTexture tex_Pluto;
 GLTexture tex_SaturnRings;
+GLTexture tex_sun;
 
 float xpos = 0, ypos = 0, zpos = 0, xrot = 0, yrot = 0, angle = 0.0;
 float lastx, lasty;
 
 double rotSunX, rotSunY, rotSunZ;
-
-GLTexture tex_sun;
 
 struct Moon {
 	double radius;
@@ -67,6 +69,23 @@ struct Star {
 	double radius;
 }TheSun;
 
+void TextBig(int x, int y, int z, float r, float g, float b, const char * string) {
+	const char *c;
+	glColor3f(r, g, b);
+	glRasterPos3f(x, y, z);
+	for (c = string; *c != '\0'; c++) {
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, *c);
+	}
+}
+
+void TextSmall(int x, int y, int z, float r, float g, float b, const char * string) {
+	const char *c;
+	glColor3f(r, g, b);
+	glRasterPos3f(x, y, z);
+	for (c = string; *c != '\0'; c++) {
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10, *c);
+	}
+}
 
 void initializePlanets() {
 	Mercury.radius = 24;
@@ -111,21 +130,18 @@ void initializePlanets() {
 void DrawEllipse(float radiusX, float radiusY)
 {
 	int i;
-
 	glBegin(GL_LINE_LOOP);
-
 	for (i = 0; i<360; i++)
 	{
 		float rad = i*DEG2RAD;
 		glVertex3f(cos(rad)*radiusX, 0,
 			sin(rad)*radiusY);
 	}
-
 	glEnd();
 }
 
 void drawRings(int inner, int outer, int angle, char* texture) {
-	//saturn rings
+
 	tex_SaturnRings.Load(texture);
 	glPushMatrix();
 	glRotated(angle, 0, 0, 1);
@@ -135,6 +151,7 @@ void drawRings(int inner, int outer, int angle, char* texture) {
 	gluQuadricTexture(qobj, 1);
 	gluDisk(qobj, inner, outer, 100, 100);
 	glPopMatrix();
+
 }
 
 void drawPlanet(Planet planet, int x, int y, int z, double rotFactor) {
@@ -209,12 +226,63 @@ void drawPlanet(Planet planet, int x, int y, int z, double rotFactor) {
 	}
 
 	glPushMatrix();
+
 	//ellipse path
 	float planetx = 0;
 	float planety = 0;
 	planetx = radOne * 2 *cos(angle);
 	planety = radTwo * 2 * sin(angle);
 	DrawEllipse(radOne *2 , radTwo*2);
+
+	//text
+	glPushMatrix();
+	if (planet.name == "Mercury" && canShowText(planetx, planety)) {
+		TextSmall(planetx, 15, planety + 10, 1.0f, 1.0f, 1.0f, "Mercury");
+		TextBig(planetx, 10, planety + 10, 1.0f, 1.0f, 1.0f, "170,503 KM/H");
+		TextSmall(planetx, 5, planety + 10, 1.0f, 1.0f, 1.0f, "Orbit Velocity");
+	}
+	else if (planet.name == "Venus" && canShowText(planetx, planety)) {
+		TextSmall(planetx, 15, planety + 10, 1.0f, 1.0f, 1.0f, "Venus");
+		TextBig(planetx, 10, planety + 10, 1.0f, 1.0f, 1.0f, "126,074 KM/H");
+		TextSmall(planetx, 5, planety + 10, 1.0f, 1.0f, 1.0f, "Orbit Velocity");
+	}
+	else if (planet.name == "Earth" && canShowText(planetx, planety)) {
+		TextSmall(planetx, 15, planety + 10, 1.0f, 1.0f, 1.0f, "Earth");
+		TextBig(planetx, 10, planety + 10, 1.0f, 1.0f, 1.0f, "107,218 KM/H");
+		TextSmall(planetx, 5, planety + 10, 1.0f, 1.0f, 1.0f, "Orbit Velocity");
+	}
+	else if (planet.name == "Mars" && canShowText(planetx, planety)) {
+		TextSmall(planetx, 15, planety + 10, 1.0f, 1.0f, 1.0f, "Mars");
+		TextBig(planetx, 10, planety + 10, 1.0f, 1.0f, 1.0f, "86,677 KM/H");
+		TextSmall(planetx, 5, planety + 10, 1.0f, 1.0f, 1.0f, "Orbit Velocity");
+	}
+	else if (planet.name == "Jupiter" && canShowText(planetx, planety)) {
+		TextSmall(planetx, 15, planety + 10, 1.0f, 1.0f, 1.0f, "Jupiter");
+		TextBig(planetx, 10, planety + 10, 1.0f, 1.0f, 1.0f, "47,002 KM/H");
+		TextSmall(planetx, 5, planety + 10, 1.0f, 1.0f, 1.0f, "Orbit Velocity");
+	}
+	else if (planet.name == "Saturn" && canShowText(planetx, planety)) {
+		TextSmall(planetx, 15, planety + 10, 1.0f, 1.0f, 1.0f, "Saturn");
+		TextBig(planetx, 10, planety + 10, 1.0f, 1.0f, 1.0f, "34,701 KM/H");
+		TextSmall(planetx, 5, planety + 10, 1.0f, 1.0f, 1.0f, "Orbit Velocity");
+	}
+	else if (planet.name == "Uranus" && canShowText(planetx, planety)) {
+		TextSmall(planetx, 15, planety + 10, 1.0f, 1.0f, 1.0f, "Uranus");
+		TextBig(planetx, 10, planety + 10, 1.0f, 1.0f, 1.0f, "24,477 KM/H");
+		TextSmall(planetx, 5, planety + 10, 1.0f, 1.0f, 1.0f, "Orbit Velocity");
+	}
+	else if (planet.name == "Neptune" && canShowText(planetx, planety)) {
+		TextSmall(planetx, 15, planety + 10, 1.0f, 1.0f, 1.0f, "Neptune");
+		TextBig(planetx, 10, planety + 10, 1.0f, 1.0f, 1.0f, "19,566 KM/H");
+		TextSmall(planetx, 5, planety + 10, 1.0f, 1.0f, 1.0f, "Orbit Velocity");
+	}
+	else if (planet.name == "Pluto" && canShowText(planetx, planety)) {
+		TextSmall(planetx, 15, planety + 10, 1.0f, 1.0f, 1.0f, "Pluto");
+		TextBig(planetx, 10, planety + 10, 1.0f, 1.0f, 1.0f, "16,809 KM/H");
+		TextSmall(planetx, 5, planety + 10, 1.0f, 1.0f, 1.0f, "Orbit Velocity");
+	}
+	glPopMatrix();
+
 	glTranslated(planetx, 0, planety);
 
 	//rotation 7awalen nafsy
@@ -228,17 +296,14 @@ void drawPlanet(Planet planet, int x, int y, int z, double rotFactor) {
 	gluQuadricTexture(quadric, 1);
 	gluSphere(quadric, planet.radius, 100, 100);
 
+	//rings
 	if (planet.name == "Saturn") {
-		//rings
 		glPushMatrix();
-		drawRings(620,700, 45,"textures/Saturn/Rings/saturnringcolor.bmp");
-		drawRings(730,850, 90,"textures/Saturn/Rings/saturnringcolor.bmp");
-		drawRings(880,1000, 125,"textures/Saturn/Rings/saturnringcolor.bmp");
+		drawRings(620,770, 45,"textures/Saturn/Rings/saturnringcolor.bmp");
+		drawRings(790,820, 90,"textures/Saturn/Rings/saturnringcolor.bmp");
 		glPopMatrix();
 	}
-
 	if (planet.name == "Uranus") {
-		//rings
 		glPushMatrix();
 		drawRings(260, 290, 45, "textures/Uranus/Rings/rings.bmp");
 		drawRings(320, 360, 90, "textures/Uranus/Rings/rings.bmp");
@@ -269,8 +334,6 @@ void drawSun(Star sun) {
 	gluQuadricTexture(qobj, 1);
 	gluSphere(qobj, sun.radius, 100, 100);
 	glPopMatrix();
-
-
 }
 
 void drawPlanets() {
@@ -295,36 +358,36 @@ void drawPlanets() {
 	glPushMatrix();
 	drawPlanet(Earth, scalingFactor * 149 / maxDistance, 0, 0, 0.24);
 	glPopMatrix();
-	
-	//mars
-	glPushMatrix();
-	drawPlanet(Mars, scalingFactor * 227 / maxDistance, 0, 0, 0.24);
-	glPopMatrix();
+	//
+	////mars
+	//glPushMatrix();
+	//drawPlanet(Mars, scalingFactor * 227 / maxDistance, 0, 0, 0.24);
+	//glPopMatrix();
 
-	//jupiter
-	glPushMatrix();
-	drawPlanet(Jupiter, scalingFactor * 778 / maxDistance, 0, 0, 0.10);
-	glPopMatrix();
+	////jupiter
+	//glPushMatrix();
+	//drawPlanet(Jupiter, scalingFactor * 778 / maxDistance, 0, 0, 0.10);
+	//glPopMatrix();
 
-	//saturn
-	glPushMatrix();
-	drawPlanet(Saturn, scalingFactor * 1426 / maxDistance, 0, 0, -0.10);
-	glPopMatrix();
+	////saturn
+	//glPushMatrix();
+	//drawPlanet(Saturn, scalingFactor * 1426 / maxDistance, 0, 0, -0.10);
+	//glPopMatrix();
 
-	//uranus
-	glPushMatrix();
-	drawPlanet(Uranus, scalingFactor * 2870 / maxDistance, 0, 0, -0.17);
-	glPopMatrix();
+	////uranus
+	//glPushMatrix();
+	//drawPlanet(Uranus, scalingFactor * 2870 / maxDistance, 0, 0, -0.17);
+	//glPopMatrix();
 
-	//neptune
-	glPushMatrix();
-	drawPlanet(Neptune, scalingFactor * 4498 / maxDistance, 0, 0, -0.16);
-	glPopMatrix();
+	////neptune
+	//glPushMatrix();
+	//drawPlanet(Neptune, scalingFactor * 4498 / maxDistance, 0, 0, -0.16);
+	//glPopMatrix();
 
-	//pluto
-	glPushMatrix();
-	drawPlanet(Pluto, scalingFactor * 5906 / maxDistance, 0, 0, -1.53);
-	glPopMatrix();
+	////pluto
+	//glPushMatrix();
+	//drawPlanet(Pluto, scalingFactor * 5906 / maxDistance, 0, 0, -1.53);
+	//glPopMatrix();
 
 	glPopMatrix();
 }
@@ -363,6 +426,15 @@ Vector At(0, 0, 0);
 Vector Up(0, 1, 0);
 
 int cameraZoom = 0;
+
+
+bool canShowText(int x, int y) {
+	if (abs(At.z - y) < 150 && abs(At.x - x) < 150)
+		showText = true;
+	else
+		showText = false;
+	return showText;
+}
 
 // An Example of how to create and use models (Model Variables)
 Model_3DS model_house;
@@ -474,21 +546,15 @@ void myDisplay(void)
 	//Draw Tree Model
 	glEnable(GL_LIGHTING);
 	glEnable(GL_TEXTURE_2D);
-	// Draw Tree Model
-	//glPushMatrix();
-	//glTranslatef(10, 0, 0);
-	//glScalef(0.7, 0.7, 0.7);
-	//model_tree.Draw();
-	//glPopMatrix();
 	
 	glPushMatrix();
 	glRotatef(xrot, 1.0, 0.0, 0.0);
-	glRotatef(yrot, 0.0, 1.0, 0.0);  //rotate our camera on the 
-									 //y - axis(up and down)
-	glTranslated(-xpos, 0.0f, -zpos); //translate the screen
-									  //to the position of our camera
+	glRotatef(yrot, 0.0, 1.0, 0.0);  //rotate our camera on the y - axis(up and down)
+	glTranslated(-xpos, 0.0f, -zpos); //translate the screen to the position of our camera
+
 	drawSun(TheSun);
 	drawPlanets();
+
 	//sky box
 	initializeSpace();
 	glPopMatrix();
@@ -603,8 +669,6 @@ void myMouse(int x, int y)
 						  //of the difference in the y position
 	yrot += (float)diffx;    //set the xrot to yrot with the addition
 							 //of the difference in the x position
-
-	
 }
 
 //=======================================================================
@@ -738,9 +802,7 @@ void main(int argc, char** argv)
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_COLOR_MATERIAL);
 
-	glShadeModel(GL_SMOOTH);
-
-	
+	glShadeModel(GL_SMOOTH);	
 
 	glColor3f(0, 0, 0);
 
