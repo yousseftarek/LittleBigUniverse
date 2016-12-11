@@ -1,0 +1,14 @@
+This model is a deconstruction of Andrew Farnaby's complete ISS model located
+on bh's website (http://www.bobhundley.com/celestia/iss.html).
+
+Simply extract the contents of the package to your \extras\ folder.
+You don't have to change or modify any existing files.
+
+
+This package contains
+
+- the ISS model of June 2008 (with Kibo) by krisci3
+- the modifying ssc file by Adirondack
+- all required textures by Bob Hundley
+
+Packaged by Adirondack for Celestia Motherlode.

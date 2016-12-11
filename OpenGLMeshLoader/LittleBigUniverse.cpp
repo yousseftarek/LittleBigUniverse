@@ -205,9 +205,11 @@ Vector Up(0, 1, 0);
 int cameraZoom = 0;
 
 // An Example of how to create and use models (Model Variables)
-Model_3DS model_house;
-Model_3DS model_tree;
 
+Model_3DS model_phobos;
+Model_3DS model_deimos;
+Model_3DS model_hubble;
+Model_3DS model_ISS;
 //=======================================================================
 // Lighting Configuration Function
 //=======================================================================
@@ -314,9 +316,13 @@ void myDisplay(void)
 	//glScalef(0.7, 0.7, 0.7);
 	//model_tree.Draw();
 	//glPopMatrix();
-
-	initializePlanets();
-	drawPlanets();
+	glPushMatrix();
+	glTranslatef(0, 0, 0);
+	glScalef(6, 6, 6);
+	model_ISS.Draw();
+	glPopMatrix();
+	
+	//drawPlanets();
 	
 	//sky box
 	/*glPushMatrix();
@@ -432,8 +438,10 @@ void LoadAssets()
 {
 	//Loading Model files
 	//model_house.Load("Models/house/house.3ds");
-	//model_tree.Load("Models/tree/Tree1.3ds");
-
+	model_phobos.Load("models/Mars/Phobos/models/phobos.3ds");
+	model_deimos.Load("models/Mars/Phobos/models/deimos.3ds");
+	model_hubble.Load("models/BigHubble/models/bigHubble.3ds");
+	model_ISS.Load("models/iss/models/ISSjun08.3ds");
 	//Loading texture files
 	loadBMP(&tex, "textures/Space/space2.bmp", true);
 }
@@ -483,6 +491,8 @@ void main(int argc, char** argv)
 	glutInitWindowPosition(100, 150);
 
 	glutCreateWindow(title);
+
+	initializePlanets();
 
 	glutDisplayFunc(myDisplay);
 
