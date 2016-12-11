@@ -37,8 +37,8 @@ struct Planet {
 }Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto; //Yes, Pluto is a f**king planet !
 
 void initializePlanets() {
-	Mercury.name = "Mercury";
 	Mercury.radius = 24;
+	Mercury.name = "Mercury";
 	Mercury.texture = "textures/Mercury/mercurymap.bmp";
 
 	Venus.radius = 60;
@@ -74,7 +74,7 @@ void initializePlanets() {
 	Pluto.texture = "textures/Pluto/plutomap2k.bmp";
 }
 
-void drawPlanet(Planet planet, int x, int y, int z) {
+void drawPlanet(Planet planet, int x, int y, int z, double rotFactor) {
 
 	char *texturePath = &planet.texture[0];
 
@@ -99,7 +99,10 @@ void drawPlanet(Planet planet, int x, int y, int z) {
 	
 	glPushMatrix();
 	glTranslated(x, y, z);
-	glScaled(0.01, 0.01, 0.01);
+	glTranslated(-20, 0, 0);
+	glRotated(rotY * rotFactor, 0, 0, 1);
+	glScaled(0.05, 0.05, 0.05);
+
 	GLUquadricObj *quadric;
 	quadric = gluNewQuadric();
 	gluQuadricDrawStyle(quadric, GLU_FILL);
@@ -114,65 +117,54 @@ void drawPlanets() {
 	int maxDistance = 5096;
 	int scalingFactor = 1000;
 
-	//rotation planet around their axes in hours
-
-
 	glPushMatrix();
 	glRotated(45, 1, 1, 0);
-//	glRotated(45, 1, 0, 0);
+	glRotated(-90, 1, 0, 0);
 
 	//mercury
 	glPushMatrix();
-	glRotated(rotY, 0, 1, 0);
-	glTranslated(-scalingFactor * 58 / maxDistance, 0, 0);
-	drawPlanet(Mercury, scalingFactor * 58 / maxDistance, 0, 0);
+	drawPlanet(Mercury, scalingFactor * 58 / maxDistance, 0, 0, 14.07);
 	glPopMatrix();
 
 	//venus
 	glPushMatrix();
-	glTranslated(-scalingFactor * 108 / maxDistance, 0, 0);
-	glRotated(rotY, 0, 1, 0);
-	glTranslated(scalingFactor * 108 / maxDistance, 0, 0);
-	drawPlanet(Venus, scalingFactor * 108 / maxDistance, 0, 0);
+	drawPlanet(Venus, scalingFactor * 108 / maxDistance, 0, 0, -58.32);
 	glPopMatrix();
 
 	//earth
 	glPushMatrix();
-	glTranslated(scalingFactor * 149 / maxDistance, 0, 0);
-	glRotated(rotY, 0, 1, 0);
-	glTranslated(-scalingFactor * 149 / maxDistance, 0, 0);
-	drawPlanet(Earth, scalingFactor * 149 / maxDistance, 0, 0);
+	drawPlanet(Earth, scalingFactor * 149 / maxDistance, 0, 0, 0.24);
 	glPopMatrix();
 	
-	////mars
-	//glPushMatrix();
-	//drawPlanet(Mars, scalingFactor * 227 / maxDistance, 0, 0);
-	//glPopMatrix();
+	//mars
+	glPushMatrix();
+	drawPlanet(Mars, scalingFactor * 227 / maxDistance, 0, 0, 0.24);
+	glPopMatrix();
 
-	////jupiter
-	//glPushMatrix();
-	//drawPlanet(Jupiter, scalingFactor * 778 / maxDistance, 0, 0);
-	//glPopMatrix();
+	//jupiter
+	glPushMatrix();
+	drawPlanet(Jupiter, scalingFactor * 778 / maxDistance, 0, 0, 0.10);
+	glPopMatrix();
 
-	////saturn
-	//glPushMatrix();
-	//drawPlanet(Saturn, scalingFactor * 1426 / maxDistance, 0, 0);
-	//glPopMatrix();
+	//saturn
+	glPushMatrix();
+	drawPlanet(Saturn, scalingFactor * 1426 / maxDistance, 0, 0, -0.10);
+	glPopMatrix();
 
-	////uranus
-	//glPushMatrix();
-	//drawPlanet(Uranus, scalingFactor * 2870 / maxDistance, 0, 0);
-	//glPopMatrix();
+	//uranus
+	glPushMatrix();
+	drawPlanet(Uranus, scalingFactor * 2870 / maxDistance, 0, 0, -0.17);
+	glPopMatrix();
 
-	////neptune
-	//glPushMatrix();
-	//drawPlanet(Neptune, scalingFactor * 4498 / maxDistance, 0, 0);
-	//glPopMatrix();
+	//neptune
+	glPushMatrix();
+	drawPlanet(Neptune, scalingFactor * 4498 / maxDistance, 0, 0, -0.16);
+	glPopMatrix();
 
-	////pluto
-	//glPushMatrix();
-	//drawPlanet(Pluto, scalingFactor * 5906 / maxDistance, 0, 0);
-	//glPopMatrix();
+	//pluto
+	glPushMatrix();
+	drawPlanet(Pluto, scalingFactor * 5906 / maxDistance, 0, 0, -1.53);
+	glPopMatrix();
 
 	glPopMatrix();
 }
@@ -325,8 +317,7 @@ void myDisplay(void)
 
 	initializePlanets();
 	drawPlanets();
-	//gluLookAt(Eye.x, Eye.y, Eye.z, At.x, At.y, At.z, Up.x, Up.y, Up.z);
-
+	
 	//sky box
 	/*glPushMatrix();
 	GLUquadricObj * qobj;
@@ -443,9 +434,8 @@ void LoadAssets()
 	//model_house.Load("Models/house/house.3ds");
 	//model_tree.Load("Models/tree/Tree1.3ds");
 
-	//Loading t		exture files
+	//Loading texture files
 	loadBMP(&tex, "textures/Space/space2.bmp", true);
-	
 }
 
 //=======================================================================
@@ -453,9 +443,31 @@ void LoadAssets()
 //=======================================================================
 void anim()
 {
-	rotY += 10;
+	rotY += 20;
 	glutPostRedisplay();	//Re-draw scene 
 }
+
+//=======================================================================
+// Special Keys Function
+//=======================================================================
+void spe(int k, int x, int y)
+{
+	if (k == GLUT_KEY_RIGHT)
+	//	tranX += 10;
+	if (k == GLUT_KEY_LEFT)
+	//	tranX -= 10;
+
+	glutPostRedisplay();
+}
+
+//=======================================================================
+// Timer Function
+//=======================================================================
+//void time(int val)//timer animation function, allows the user to pass an integer valu to the timer function.
+//{
+//	glutPostRedisplay();
+//	glutTimerFunc(1, time, 0);//recall the time function after 1 ms and pass a zero value as an input to the time func.
+//}
 
 //=======================================================================
 // Main Function
@@ -475,6 +487,8 @@ void main(int argc, char** argv)
 	glutDisplayFunc(myDisplay);
 
 	glutKeyboardFunc(myKeyboard);
+
+	glutSpecialFunc(spe);
 
 	glutMotionFunc(myMotion);
 
