@@ -39,7 +39,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <iostream>
 
+using namespace std;
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -55,6 +57,22 @@ GLTexture::~GLTexture()
 
 }
 
+void GLTexture::Load(char *name, AUX_RGBImageRec* lolo)
+{
+	// make the texture name all lower case
+	texturename = _strlwr(_strdup(name));
+
+	// strip "'s
+	if (strstr(texturename, "\""))
+		texturename = strtok(texturename, "\"");
+
+	// check the file extension to see what type of texture
+	//if(strstr(texturename, ".bmp"))	
+		LoadBMP(lolo);
+	if(strstr(texturename, ".tga"))	
+		LoadTGA(texturename);
+}
+
 void GLTexture::Load(char *name)
 {
 	// make the texture name all lower case
@@ -65,9 +83,9 @@ void GLTexture::Load(char *name)
 		texturename = strtok(texturename, "\"");
 
 	// check the file extension to see what type of texture
-	if(strstr(texturename, ".bmp"))	
-		LoadBMP(texturename);
-	if(strstr(texturename, ".tga"))	
+	if (strstr(texturename, ".bmp"))
+		LoadBMP2(name);
+	if (strstr(texturename, ".tga"))
 		LoadTGA(texturename);
 }
 
@@ -89,7 +107,77 @@ void GLTexture::Use()
 	glBindTexture(GL_TEXTURE_2D, texture[0]);				// Bind the texture as the current one
 }
 
-void GLTexture::LoadBMP(char *name)
+AUX_RGBImageRec* GLTexture::myLoad(char *x) {
+	// Create a place to store the texture
+	AUX_RGBImageRec *TextureImage[1];
+
+	// Set the pointer to NULL
+	memset(TextureImage, 0, sizeof(void *) * 1);
+
+	char *lolo;
+	// make the texture name all lower case
+	 lolo = _strlwr(_strdup(x));
+
+	// strip "'s
+	if (strstr(lolo, "\""))
+		lolo = strtok(lolo, "\"");
+
+	
+	// Load the bitmap and assign our pointer to it
+	AUX_RGBImageRec *k = auxDIBImageLoad(lolo);
+
+	return k;
+}
+
+void GLTexture::LoadBMP(AUX_RGBImageRec* lolo)
+{
+	//// Create a place to store the texture
+	//AUX_RGBImageRec *TextureImage[1];
+
+	//// Set the pointer to NULL
+	//memset(TextureImage,0,sizeof(void *)*1);
+
+	//// Load the bitmap and assign our pointer to it
+	//TextureImage[0] = auxDIBImageLoad(name);
+
+	// If the texture file was not found, return from the function
+	if(!lolo) 
+		return;
+
+	// Just in case we want to use the width and height later
+	width = lolo->sizeX;
+	height = lolo->sizeY;
+
+	// Generate the OpenGL texture id
+	glGenTextures(1, &texture[0]);
+	// Bind this texture to its id
+	glBindTexture(GL_TEXTURE_2D, *texture);
+
+	/*std::cout << "\n";
+	std::cout << lolo->data;*/
+
+	// Use mipmapping filter
+	/*glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);*/
+
+	// Generate the mipmaps
+	gluBuild2DMipmaps(GL_TEXTURE_2D, 3, lolo->sizeX, lolo->sizeY, GL_RGB, GL_UNSIGNED_BYTE, lolo->data);
+
+	// Cleanup
+	/*if (lolo)
+	{
+		
+		if (lolo->data)
+			free(lolo->data);
+
+		free(lolo);
+	}
+	else {
+		std::cout << "No LOLO";
+	}*/
+}
+
+void GLTexture::LoadBMP2(char *name)
 {
 	// Create a place to store the texture
 	AUX_RGBImageRec *TextureImage[1];
@@ -101,7 +189,7 @@ void GLTexture::LoadBMP(char *name)
 	TextureImage[0] = auxDIBImageLoad(name);
 
 	// If the texture file was not found, return from the function
-	if(!TextureImage[0]) 
+	if (!TextureImage[0])
 		return;
 
 	// Just in case we want to use the width and height later
@@ -115,8 +203,8 @@ void GLTexture::LoadBMP(char *name)
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
 
 	// Use mipmapping filter
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	// Generate the mipmaps
 	gluBuild2DMipmaps(GL_TEXTURE_2D, 3, TextureImage[0]->sizeX, TextureImage[0]->sizeY, GL_RGB, GL_UNSIGNED_BYTE, TextureImage[0]->data);
