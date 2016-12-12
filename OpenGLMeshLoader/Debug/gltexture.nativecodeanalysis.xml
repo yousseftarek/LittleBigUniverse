@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DEFECTS>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>c:\users\mayassin\guc\semester 7\dmet 502 computer graphics\littlebiguniverse\openglmeshloader\</FILEPATH>
+      <FILENAME>gltexture.cpp</FILENAME>
+      <LINE>223</LINE>
+      <COLUMN>6</COLUMN>
+    </SFA>
+    <DEFECTCODE>6280</DEFECTCODE>
+    <DESCRIPTION>'imageData' is allocated with 'new []', but deleted with 'free'.</DESCRIPTION>
+    <FUNCTION>GLTexture::LoadTGA</FUNCTION>
+    <DECORATED>?LoadTGA@GLTexture@@QAEXPAD@Z</DECORATED>
+    <FUNCLINE>134</FUNCLINE>
+    <PATH>
+      <SFA>
+        <FILEPATH>c:\users\mayassin\guc\semester 7\dmet 502 computer graphics\littlebiguniverse\openglmeshloader\</FILEPATH>
+        <FILENAME>gltexture.cpp</FILENAME>
+        <LINE>181</LINE>
+        <COLUMN>14</COLUMN>
+      </SFA>
+      <SFA>
+        <FILEPATH>c:\users\mayassin\guc\semester 7\dmet 502 computer graphics\littlebiguniverse\openglmeshloader\</FILEPATH>
+        <FILENAME>gltexture.cpp</FILENAME>
+        <LINE>223</LINE>
+        <COLUMN>6</COLUMN>
+      </SFA>
+    </PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>c:\users\mayassin\guc\semester 7\dmet 502 computer graphics\littlebiguniverse\openglmeshloader\</FILEPATH>
+      <FILENAME>gltexture.cpp</FILENAME>
+      <LINE>372</LINE>
+      <COLUMN>6</COLUMN>
+    </SFA>
+    <DEFECTCODE>6280</DEFECTCODE>
+    <DESCRIPTION>'imageData' is allocated with 'new []', but deleted with 'free'.</DESCRIPTION>
+    <FUNCTION>GLTexture::LoadTGAResource</FUNCTION>
+    <DECORATED>?LoadTGAResource@GLTexture@@QAEXPAD@Z</DECORATED>
+    <FUNCLINE>283</FUNCLINE>
+    <PATH>
+      <SFA>
+        <FILEPATH>c:\users\mayassin\guc\semester 7\dmet 502 computer graphics\littlebiguniverse\openglmeshloader\</FILEPATH>
+        <FILENAME>gltexture.cpp</FILENAME>
+        <LINE>341</LINE>
+        <COLUMN>14</COLUMN>
+      </SFA>
+      <SFA>
+        <FILEPATH>c:\users\mayassin\guc\semester 7\dmet 502 computer graphics\littlebiguniverse\openglmeshloader\</FILEPATH>
+        <FILENAME>gltexture.cpp</FILENAME>
+        <LINE>372</LINE>
+        <COLUMN>6</COLUMN>
+      </SFA>
+    </PATH>
+  </DEFECT>
+</DEFECTS>

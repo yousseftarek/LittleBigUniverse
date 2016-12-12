@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DEFECTS>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>c:\users\mayassin\guc\semester 7\dmet 502 computer graphics\littlebiguniverse\openglmeshloader\</FILEPATH>
+      <FILENAME>texturebuilder.h</FILENAME>
+      <LINE>15</LINE>
+      <COLUMN>7</COLUMN>
+    </SFA>
+    <DEFECTCODE>6387</DEFECTCODE>
+    <DESCRIPTION>'data' could be '0':  this does not adhere to the specification for the function 'fread'. </DESCRIPTION>
+    <FUNCTION>loadPPM</FUNCTION>
+    <DECORATED>?loadPPM@@YAXPAIPADHHH@Z</DECORATED>
+    <FUNCLINE>8</FUNCLINE>
+    <PROBABILITY>1</PROBABILITY>
+    <RANK>4</RANK>
+    <CATEGORY>
+      <RULECATEGORY>mspft</RULECATEGORY>
+    </CATEGORY>
+    <PATH>
+      <SFA>
+        <FILEPATH>c:\users\mayassin\guc\semester 7\dmet 502 computer graphics\littlebiguniverse\openglmeshloader\</FILEPATH>
+        <FILENAME>texturebuilder.h</FILENAME>
+        <LINE>9</LINE>
+        <COLUMN>7</COLUMN>
+      </SFA>
+      <SFA>
+        <FILEPATH>c:\users\mayassin\guc\semester 7\dmet 502 computer graphics\littlebiguniverse\openglmeshloader\</FILEPATH>
+        <FILENAME>texturebuilder.h</FILENAME>
+        <LINE>10</LINE>
+        <COLUMN>7</COLUMN>
+      </SFA>
+      <SFA>
+        <FILEPATH>c:\users\mayassin\guc\semester 7\dmet 502 computer graphics\littlebiguniverse\openglmeshloader\</FILEPATH>
+        <FILENAME>texturebuilder.h</FILENAME>
+        <LINE>12</LINE>
+        <COLUMN>8</COLUMN>
+      </SFA>
+      <SFA>
+        <FILEPATH>c:\users\mayassin\guc\semester 7\dmet 502 computer graphics\littlebiguniverse\openglmeshloader\</FILEPATH>
+        <FILENAME>texturebuilder.h</FILENAME>
+        <LINE>13</LINE>
+        <COLUMN>5</COLUMN>
+      </SFA>
+      <SFA>
+        <FILEPATH>c:\users\mayassin\guc\semester 7\dmet 502 computer graphics\littlebiguniverse\openglmeshloader\</FILEPATH>
+        <FILENAME>texturebuilder.h</FILENAME>
+        <LINE>14</LINE>
+        <COLUMN>7</COLUMN>
+        <KEYEVENT>
+          <ID>1</ID>
+          <KIND>declaration</KIND>
+          <IMPORTANCE>Essential</IMPORTANCE>
+          <MESSAGE>'data' may be NULL</MESSAGE>
+        </KEYEVENT>
+      </SFA>
+      <SFA>
+        <FILEPATH>c:\users\mayassin\guc\semester 7\dmet 502 computer graphics\littlebiguniverse\openglmeshloader\</FILEPATH>
+        <FILENAME>texturebuilder.h</FILENAME>
+        <LINE>15</LINE>
+        <COLUMN>7</COLUMN>
+        <KEYEVENT>
+          <ID>2</ID>
+          <KIND>declaration</KIND>
+          <IMPORTANCE>Full</IMPORTANCE>
+          <MESSAGE>'data' is an In/Out argument to 'fread' (declared at c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h:231)</MESSAGE>
+        </KEYEVENT>
+      </SFA>
+      <SFA>
+        <FILEPATH>c:\users\mayassin\guc\semester 7\dmet 502 computer graphics\littlebiguniverse\openglmeshloader\</FILEPATH>
+        <FILENAME>texturebuilder.h</FILENAME>
+        <LINE>15</LINE>
+        <COLUMN>7</COLUMN>
+        <KEYEVENT>
+          <ID>3</ID>
+          <KIND>usage</KIND>
+          <IMPORTANCE>Essential</IMPORTANCE>
+          <MESSAGE>'data' should not be NULL, because this is not consistent with the SAL annotation on 'fread'</MESSAGE>
+        </KEYEVENT>
+      </SFA>
+    </PATH>
+  </DEFECT>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>c:\users\mayassin\guc\semester 7\dmet 502 computer graphics\littlebiguniverse\openglmeshloader\</FILEPATH>
+      <FILENAME>glut.h</FILENAME>
+      <LINE>146</LINE>
+      <COLUMN>28</COLUMN>
+    </SFA>
+    <DEFECTCODE>28251</DEFECTCODE>
+    <DESCRIPTION>Inconsistent annotation for 'exit': this instance has no annotations. See c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdlib.h(50). </DESCRIPTION>
+    <FUNCTION>exit</FUNCTION>
+    <DECORATED>exit</DECORATED>
+    <FUNCLINE>146</FUNCLINE>
+    <PATH></PATH>
+  </DEFECT>
+</DEFECTS>

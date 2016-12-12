@@ -14,6 +14,7 @@ using namespace irrklang;
 #include <iostream>
 #include <glut.h>
 #include <math.h>
+#include "SOIL.h"
 
 
 void initializeSpace(void);
@@ -21,11 +22,15 @@ bool canShowText(int, int);
 
 using namespace std;
 
+
+
 #define degree 0.0174533
 #define DEG2RAD 3.14159/180.0
 
 int WIDTH = 1280;
 int HEIGHT = 720;
+
+int mouseX= WIDTH/2, mouseY = HEIGHT/2;
 
 double rotY = 0;
 float angleMercury = 0;
@@ -40,19 +45,11 @@ float anglePluto = 0;
 
 bool showText = true;
 
+
+
 //Textures
-GLuint tex;
-GLTexture tex_Mars;
-GLTexture tex_Earth;
-GLTexture tex_Mercury;
-GLTexture tex_Jupiter;
-GLTexture tex_Neptune;
-GLTexture tex_Saturn;
-GLTexture tex_Uranus;
-GLTexture tex_Venus;
-GLTexture tex_Pluto;
-GLTexture tex_SaturnRings;
-GLTexture tex_sun;
+GLuint tex, sunTexture, mercuryTexture, venusTexture, earthTexture, marsTexture, jupiterTexture, saturnTexture, uranusTexture, neptuneTexture, plutoTexture;
+
 
 float xpos = 0, ypos = 0, zpos = 0, xrot = 0, yrot = 0, angle = 0.0;
 float lastx, lasty;
@@ -69,7 +66,6 @@ struct Planet {
 	std::string name;
 	double radius;
 	std::string texture;
-	//Moon moons[] = { {10,10,""} };
 }Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto; //Yes, Pluto is a f**king planet !
 
 
@@ -98,39 +94,39 @@ void TextSmall(int x, int y, int z, float r, float g, float b, const char * stri
 void initializePlanets() {
 	Mercury.radius = 24;
 	Mercury.name = "Mercury";
-	Mercury.texture = "textures/Mercury/mercurymap.bmp";
+	Mercury.texture = "textures/mercury/mercurymap.bmp";
 
 	Venus.radius = 60;
 	Venus.name = "Venus";
-	Venus.texture = "textures/Venus/venusmap.bmp";
+	Venus.texture = "textures/venus/venusmap.bmp";
 
 	Earth.radius = 63;
 	Earth.name = "Earth";
-	Earth.texture = "textures/Earth/earth.bmp";
+	Earth.texture = "textures/earth/earth.bmp";
 
 	Mars.radius = 34;
 	Mars.name = "Mars";
-	Mars.texture = "textures/Mars/marsmap1k.bmp";
+	Mars.texture = "textures/mars/marsmap1k.bmp";
 
 	Jupiter.radius = 700;
 	Jupiter.name = "Jupiter";
-	Jupiter.texture = "textures/Jupiter/jupiter.bmp";
+	Jupiter.texture = "textures/jupiter/jupiter.bmp";
 
 	Saturn.radius = 582;
 	Saturn.name = "Saturn";
-	Saturn.texture = "textures/Saturn/saturnmap.bmp";
+	Saturn.texture = "textures/saturn/saturnmap.bmp";
 
 	Uranus.radius = 253;
 	Uranus.name = "Uranus";
-	Uranus.texture = "textures/Uranus/uranusmap.bmp";
+	Uranus.texture = "textures/uranus/uranusmap.bmp";
 
 	Neptune.radius = 246;
 	Neptune.name = "Neptune";
-	Neptune.texture = "textures/Neptune/neptunemap.bmp";
+	Neptune.texture = "textures/neptune/neptunemap.bmp";
 
 	Pluto.radius = 15; 
 	Pluto.name = "Pluto";
-	Pluto.texture = "textures/Pluto/plutomap2k.bmp";
+	Pluto.texture = "textures/pluto/plutomap2k.bmp";
 
 	TheSun.radius = 50;
 }
@@ -150,7 +146,6 @@ void DrawEllipse(float radiusX, float radiusY)
 
 void drawRings(int inner, int outer, int angle, char* texture) {
 
-	tex_SaturnRings.Load(texture);
 	glPushMatrix();
 	glRotated(angle, 0, 0, 1);
 	GLUquadricObj * qobj;
@@ -170,63 +165,64 @@ void drawPlanet(Planet planet, int x, int y, int z, double rotFactor) {
 	float angle = 0;
 
 	if (planet.name == "Mars") {
-		tex_Mars.Load(texturePath);
+		glBindTexture(GL_TEXTURE_2D, marsTexture);
 		radTwo = 227;
 		radOne = radTwo / 2;
 		angleMars += degree/2;
 		angle = angleMars;
 	}
 	else if (planet.name == "Earth") {
-		tex_Earth.Load(texturePath);
+		//tex_Earth.Load("", textures[2]);
+		glBindTexture(GL_TEXTURE_2D, earthTexture);
 		radTwo = 149;
 		radOne = radTwo / 2;
 		angleEarth += degree;
 		angle = angleEarth;
 	}
 	else if (planet.name == "Mercury") {
-		tex_Mercury.Load(texturePath);
+		glBindTexture(GL_TEXTURE_2D, mercuryTexture);
 		radTwo = 58;
 		radOne = radTwo / 2;
 		angleMercury += degree*4.14772727;
 		angle = angleMercury;
 	}
 	else if (planet.name == "Jupiter") {
-		tex_Jupiter.Load(texturePath);
+		glBindTexture(GL_TEXTURE_2D, jupiterTexture);
 		radTwo = 778;
 		radOne = radTwo/2;
 		angleJupiter += degree;
 		angle = angleJupiter;
 	}
 	else if (planet.name == "Neptune") {
-		tex_Neptune.Load(texturePath);
+		glBindTexture(GL_TEXTURE_2D, neptuneTexture);
 		radTwo = 4498;
 		radOne = radTwo / 2;
 		angleNeptune += degree*0.00608;
 		angle = angleNeptune;
 	}
 	else if (planet.name == "Pluto") {
-		tex_Pluto.Load(texturePath);
+		glBindTexture(GL_TEXTURE_2D, plutoTexture);
 		radTwo = 5906;
 		radOne = radTwo / 2;
 		anglePluto += degree*0.0040555;
 		angle = anglePluto;
 	}
 	else if (planet.name == "Saturn") {
-		tex_Saturn.Load(texturePath);
+		glBindTexture(GL_TEXTURE_2D, saturnTexture);
 		radTwo = 1426;
 		radOne = radTwo / 2;
 		angleSaturn += degree*0.0331818;
 		angle = angleSaturn;
 	}
 	else if (planet.name == "Uranus") {
-		tex_Uranus.Load(texturePath);
+		glBindTexture(GL_TEXTURE_2D, uranusTexture);
 		radTwo = 2870;
 		radOne = radTwo / 2;
 		angleUranus += degree*0.0117741;
 		angle = angleUranus;
 	}
 	else if (planet.name == "Venus") {
-		tex_Venus.Load(texturePath);
+		glBindTexture(GL_TEXTURE_2D, venusTexture);
 		radTwo = 108;
 		radOne = radTwo / 2;
 		angleVenus += degree*1.622222;
@@ -296,7 +292,7 @@ void drawPlanet(Planet planet, int x, int y, int z, double rotFactor) {
 	//rotation 7awalen nafsy
 	glRotated(rotY * rotFactor, 0, 1, 0);
 	glRotated(-90, 1, 0, 0);
-	glScaled(0.05, 0.05, 0.05);
+	glScaled(0.1, 0.1, 0.1);
 
 	GLUquadricObj *quadric;
 	quadric = gluNewQuadric();
@@ -333,7 +329,9 @@ void drawSun(Star sun) {
 	GLfloat sun_material[] = { 0.8,0.8,0.8, 1};
 	glMaterialfv(GL_FRONT, GL_EMISSION, sun_material);
 
-	tex_sun.Load("Textures/Sun/sun.bmp");
+	//tex_sun.Load("Textures/Sun/sun.bmp");
+	//tex_sun.Load("",textures[9]);
+	glBindTexture(GL_TEXTURE_2D, sunTexture);
 	glRotated(rotSunY, 0,1,0);
 	glRotated(90, 1, 0, 0);
 	GLUquadricObj * qobj;
@@ -366,36 +364,36 @@ void drawPlanets() {
 	glPushMatrix();
 	drawPlanet(Earth, scalingFactor * 149 / maxDistance, 0, 0, 0.24);
 	glPopMatrix();
-	//
-	////mars
-	//glPushMatrix();
-	//drawPlanet(Mars, scalingFactor * 227 / maxDistance, 0, 0, 0.24);
-	//glPopMatrix();
+	
+	//mars
+	glPushMatrix();
+	drawPlanet(Mars, scalingFactor * 227 / maxDistance, 0, 0, 0.24);
+	glPopMatrix();
 
-	////jupiter
-	//glPushMatrix();
-	//drawPlanet(Jupiter, scalingFactor * 778 / maxDistance, 0, 0, 0.10);
-	//glPopMatrix();
+	//jupiter
+	glPushMatrix();
+	drawPlanet(Jupiter, scalingFactor * 778 / maxDistance, 0, 0, 0.10);
+	glPopMatrix();
 
-	////saturn
-	//glPushMatrix();
-	//drawPlanet(Saturn, scalingFactor * 1426 / maxDistance, 0, 0, -0.10);
-	//glPopMatrix();
+	//saturn
+	glPushMatrix();
+	drawPlanet(Saturn, scalingFactor * 1426 / maxDistance, 0, 0, -0.10);
+	glPopMatrix();
 
-	////uranus
-	//glPushMatrix();
-	//drawPlanet(Uranus, scalingFactor * 2870 / maxDistance, 0, 0, -0.17);
-	//glPopMatrix();
+	//uranus
+	glPushMatrix();
+	drawPlanet(Uranus, scalingFactor * 2870 / maxDistance, 0, 0, -0.17);
+	glPopMatrix();
 
-	////neptune
-	//glPushMatrix();
-	//drawPlanet(Neptune, scalingFactor * 4498 / maxDistance, 0, 0, -0.16);
-	//glPopMatrix();
+	//neptune
+	glPushMatrix();
+	drawPlanet(Neptune, scalingFactor * 4498 / maxDistance, 0, 0, -0.16);
+	glPopMatrix();
 
-	////pluto
-	//glPushMatrix();
-	//drawPlanet(Pluto, scalingFactor * 5906 / maxDistance, 0, 0, -1.53);
-	//glPopMatrix();
+	//pluto
+	glPushMatrix();
+	drawPlanet(Pluto, scalingFactor * 5906 / maxDistance, 0, 0, -1.53);
+	glPopMatrix();
 
 	glPopMatrix();
 }
@@ -445,9 +443,11 @@ bool canShowText(int x, int y) {
 }
 
 // An Example of how to create and use models (Model Variables)
-Model_3DS model_house;
-Model_3DS model_tree;
 
+Model_3DS model_phobos;
+Model_3DS model_deimos;
+Model_3DS model_hubble;
+Model_3DS model_ISS;
 //=======================================================================
 // Lighting Configuration Function
 //=======================================================================
@@ -552,6 +552,7 @@ void myDisplay(void)
 	glLightfv(GL_LIGHT0, GL_AMBIENT, lightIntensity);
 	glEnable(GL_TEXTURE_2D);*/
 	//Draw Tree Model
+
 	glEnable(GL_LIGHTING);
 	glEnable(GL_TEXTURE_2D);
 	
@@ -568,6 +569,7 @@ void myDisplay(void)
 	glPopMatrix();
 	
 	glutSwapBuffers();
+	
 }
 
 //=======================================================================
@@ -666,7 +668,7 @@ void myMotion(int x, int y)
 //=======================================================================
 void myMouse(int x, int y)
 {
-
+	
 	int diffx = x - lastx; //check the difference between the 
 						   //current x and the last x position
 	int diffy = y - lasty; //check the difference between the 
@@ -677,6 +679,7 @@ void myMouse(int x, int y)
 						  //of the difference in the y position
 	yrot += (float)diffx;    //set the xrot to yrot with the addition
 							 //of the difference in the x position
+	
 }
 
 //=======================================================================
@@ -712,11 +715,86 @@ void LoadAssets()
 {
 	//Loading Model files
 	//model_house.Load("Models/house/house.3ds");
-	//model_tree.Load("Models/tree/Tree1.3ds");
-
+	model_phobos.Load("models/Mars/Phobos/models/phobos.3ds");
+	model_deimos.Load("models/Mars/Phobos/models/deimos.3ds");
+	model_hubble.Load("models/BigHubble/models/bigHubble.3ds");
+	model_ISS.Load("models/iss/models/ISSjun08.3ds");
 	//Loading texture files
-	loadBMP(&tex, "textures/Space/space2.bmp", true);
-	
+
+}
+
+
+void loadImages() {
+
+	tex = SOIL_load_OGL_texture(
+		"textures/Space/space2.bmp",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+		);
+
+	sunTexture = SOIL_load_OGL_texture(
+		"textures/sun/sun.bmp",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+
+	mercuryTexture = SOIL_load_OGL_texture(
+		"textures/mercury/mercurymap.bmp",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+		);
+	venusTexture = SOIL_load_OGL_texture(
+		"textures/venus/venusmap.bmp",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+		);
+	earthTexture = SOIL_load_OGL_texture(
+		"textures/earth/earth.bmp",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+		);
+	marsTexture = SOIL_load_OGL_texture(
+		"textures/mars/marsmap1k.bmp",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+		);
+	jupiterTexture = SOIL_load_OGL_texture(
+		"textures/jupiter/jupiter.bmp",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+		);
+	saturnTexture = SOIL_load_OGL_texture(
+		"textures/saturn/saturnmap.bmp",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+		);
+	uranusTexture = SOIL_load_OGL_texture(
+		"textures/uranus/uranusmap.bmp",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+		);
+	neptuneTexture = SOIL_load_OGL_texture(
+		"textures/neptune/neptunemap.bmp",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+		);
+	plutoTexture = SOIL_load_OGL_texture(
+		"textures/pluto/plutomap2k.bmp",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+		);
+
 }
 
 void anim() {
@@ -727,6 +805,10 @@ void anim() {
 		rotSunY = 0;
 	}
 	rotY += 20;
+
+	//glutWarpPointer(WIDTH / 2, HEIGHT / 2);
+
+	
 	glutPostRedisplay();
 }
 
@@ -759,14 +841,7 @@ void spe(int k, int x, int y)
 	glutPostRedisplay();
 }
 
-//=======================================================================
-// Timer Function
-//=======================================================================
-//void time(int val)//timer animation function, allows the user to pass an integer valu to the timer function.
-//{
-//	glutPostRedisplay();
-//	glutTimerFunc(1, time, 0);//recall the time function after 1 ms and pass a zero value as an input to the time func.
-//}
+
 
 //=======================================================================
 // Main Function
@@ -782,6 +857,8 @@ void main(int argc, char** argv)
 	glutInitWindowPosition(0, 0);
 
 	glutCreateWindow(title);
+
+	initializePlanets();
 
 	glutDisplayFunc(myDisplay);
 
@@ -801,8 +878,10 @@ void main(int argc, char** argv)
 
 	glEnable(GL_TEXTURE_2D);
 	
+	loadImages();
 	LoadAssets();
 	initializePlanets();
+	glutWarpPointer(WIDTH / 2, HEIGHT / 2);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_LIGHTING);

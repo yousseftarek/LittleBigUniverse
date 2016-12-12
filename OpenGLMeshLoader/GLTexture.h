@@ -57,8 +57,11 @@ public:
 	void LoadBMPResource(char *name);				// Load a bitmap from the resources
 	void LoadFromResource(char *name);				// Load the texture from a resource
 	void LoadTGA(char *name);						// Loads a targa file
-	void LoadBMP(char *name);						// Loads a bitmap file
-	void Load(char *name);							// Load the texture
+	void LoadBMP(AUX_RGBImageRec* name);
+	void LoadBMP2(char *name);// Loads a bitmap file
+	void Load(char *name, AUX_RGBImageRec* lolo);	
+	void Load(char *name);// Load the texture
+	AUX_RGBImageRec* GLTexture::myLoad(char *x);    //amoot fel faty.
 	GLTexture();									// Constructor
 	virtual ~GLTexture();							// Destructor
 
