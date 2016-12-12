@@ -14,7 +14,6 @@ using namespace irrklang;
 #include <math.h>
 #include "SOIL.h"
 
-
 void initializeSpace(void);
 bool canShowText(int, int);
 
@@ -30,6 +29,7 @@ int mouseX= WIDTH/2, mouseY = HEIGHT/2;
 
 double rotY = 0;
 double rotHubble = 0;
+
 float angleMercury = 0;
 float angleVenus = 0;
 float angleEarth = 0;
@@ -39,6 +39,8 @@ float angleUranus = 0;
 float angleSaturn = 0;
 float angleNeptune = 0;
 float anglePluto = 0;
+
+float angleMoon = 0, angleISS = 0, angleHubble = 0, anglePhobos = 0, angleDeimos = 0;
 
 bool showText = true;
 
@@ -300,7 +302,6 @@ void drawPlanet(Planet planet, int x, int y, int z, double rotFactor) {
 	gluQuadricTexture(quadric, 1);
 	gluSphere(quadric, planet.radius, 100, 100);
 	
-	//glPushMatrix();
 	if (planet.name == "Earth") {
 		
 		//moon
@@ -308,9 +309,9 @@ void drawPlanet(Planet planet, int x, int y, int z, double rotFactor) {
 		glRotated(-90, 1, 0, 0);
 		float Moonx = 0;
 		float Moony = 0;
-		float angelMoon = degree;
-		Moonx = 90 * cos(angelMoon);
-		Moony = 100 * sin(angelMoon);
+		angleMoon += angleEarth * 0.007;
+		Moonx = 90 * cos(angleMoon);
+		Moony = 100 * sin(angleMoon);
 		DrawEllipse(90, 100);
 		
 		glTranslated(Moonx, 0, Moony);
@@ -328,26 +329,91 @@ void drawPlanet(Planet planet, int x, int y, int z, double rotFactor) {
 		glPopMatrix();
 
 		//hubble
-	//	glPushMatrix();
-	//	glRotated(45, 1, 0, 0);
-	//	float hubblex = 0;
-	//	float hubbley = 0;
-	//	hubblex =90 * cos(angle);
-	//	hubbley = 100 * sin(angle);
-	//	DrawEllipse(90, 100);
+		glPushMatrix();
+		glRotated(45, 1, 0, 0);
+		float hubblex = 0;
+		float hubbley = 0;
+		angleHubble += angleEarth * 0.006; 
+		hubblex =90 * cos(angleHubble);
+		hubbley = 100 * sin(angleHubble);
+		DrawEllipse(90, 100);
 
-	//	glTranslated(hubblex, 0, hubbley);
+		glTranslated(hubblex, 0, hubbley);
 
-	//	//rotation 7awalen nafsy
-	//	glRotated(rotY * rotHubble * 2, 0, 1, 0);
-	//
-	//	glRotated(90, 1, 0, 0);
-	//	glScaled(0.1, 0.1, 0.1);
-	////	model_hubble.Draw();
-	//	glPopMatrix();
+		//rotation 7awalen nafsy
+		glRotated(rotHubble * 2, 0, 1, 0);
+
+		glPushMatrix();
+		glRotated(90, 1, 0, 0);
+		glScaled(0.1, 0.1, 0.1);
+		//model_hubble.Draw();
+		glPopMatrix();
+		glPopMatrix();
+
+		//ISS
+		glPushMatrix();
+		glRotated(-45, 1, 0, 0);
+		float ISSx = 0;
+		float ISSy = 0;
+		angleISS += angleEarth * 0.006;
+		ISSx = 90 * cos(angleISS);
+		ISSy = 100 * sin(angleISS);
+		DrawEllipse(90, 100);
+
+		glTranslated(ISSx, 0, ISSy);
+
+		//rotation 7awalen nafsy
+		glRotated(rotY * rotHubble * 2, 0, 1, 0);
+
+		glPushMatrix();
+		glScaled(200, 200, 200);
+		model_ISS.Draw();
+		glPopMatrix();
+		glPopMatrix();
 
 	}
-	//glPopMatrix();
+
+	if (planet.name == "Mars") {
+
+		//deimos
+		glPushMatrix();
+		glRotated(90, 1, 0, 0);
+		float r1 = 80;
+		float r2 = 100;
+		angleDeimos += angleMars * 0.007;
+		float deimosx = 0;
+		float deimosy = 0;
+		deimosx = r1 * cos(angleDeimos);
+		deimosy = r2 * sin(angleDeimos);
+		//DrawEllipse(r1, r2);
+		
+		glTranslated(deimosx, -25, deimosy);
+		glPushMatrix();
+		glRotated(90, 1, 0, 0);
+		glScaled(2, 2, 2);
+		model_deimos.Draw();
+		glPopMatrix();
+		glPopMatrix();
+
+		//phobos
+		glPushMatrix();
+		glRotated(90, 1, 0, 0);
+		float phobosx = 10;
+		float phobosy = 20;
+		anglePhobos += angleMars * 0.006;
+		phobosx = 60 * cos(anglePhobos);
+		phobosy = 70 * sin(anglePhobos);
+		//DrawEllipse(60, 70);
+		
+		glTranslated(phobosx + 10, 10, phobosy);
+		glPushMatrix();
+		glRotated(90, 1, 0, 0);
+		glScaled(0.8, 0.8, 0.8);
+		model_phobos.Draw();
+		glPopMatrix();
+		glPopMatrix();
+
+	}
 
 	//rings
 	if (planet.name == "Saturn") {
@@ -607,7 +673,7 @@ void myDisplay(void)
 
 	drawSun(TheSun);
 	drawPlanets();
-
+	
 	//sky box
 	initializeSpace();
 	glPopMatrix();
@@ -854,7 +920,7 @@ void anim() {
 		rotSunY = 0;
 	}
 	rotY += 20;
-	rotHubble += 5;
+	rotHubble += 1;
 
 	//glutWarpPointer(WIDTH / 2, HEIGHT / 2);	
 	glutPostRedisplay();
