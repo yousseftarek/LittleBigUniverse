@@ -1,13 +1,21 @@
 //kernel32.lib, user32.lib, gdi32.lib and advapi32.lib
 //#pragma comment(lib, "legacy_stdio_definitions.lib")
+
+
 #include "TextureBuilder.h"
 #include "Model_3DS.h"
 #include "GLTexture.h"
+
+#include <irrKlang/irrKlang.h>
+
+using namespace irrklang;
+#pragma comment(lib, "irrKlang.lib") // link with irrKlang.dll
 #include <string>
 #include <iostream>
 #include <glut.h>
 #include <math.h>
 #include "SOIL.h"
+
 
 void initializeSpace(void);
 bool canShowText(int, int);
@@ -884,6 +892,9 @@ void main(int argc, char** argv)
 	glShadeModel(GL_SMOOTH);	
 
 	glColor3f(0, 0, 0);
+
+	irrklang::ISoundEngine* engine = irrklang::createIrrKlangDevice();
+	engine->play2D("Dawn - The Cinematic Orchestra.mp3", true); // play some mp3 file, looped
 
 	glutMainLoop();
 }
