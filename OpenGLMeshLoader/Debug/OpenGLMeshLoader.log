@@ -2,11 +2,11 @@
   LittleBigUniverse.cpp
 c:\users\rana\documents\7th semester (csen)\dmet 502 (computer graphics)\project\littlebiguniverse\openglmeshloader\texturebuilder.h(27): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
 c:\users\rana\documents\7th semester (csen)\dmet 502 (computer graphics)\project\littlebiguniverse\openglmeshloader\texturebuilder.h(28): warning C4244: 'argument': conversion from 'int' to 'GLfloat', possible loss of data
-c:\users\rana\documents\7th semester (csen)\dmet 502 (computer graphics)\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(57): warning C4200: nonstandard extension used: zero-sized array in struct/union
-  c:\users\rana\documents\7th semester (csen)\dmet 502 (computer graphics)\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(57): note: This member will be ignored by a defaulted constructor or copy/move assignment operator
-c:\users\rana\documents\7th semester (csen)\dmet 502 (computer graphics)\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(322): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
-c:\users\rana\documents\7th semester (csen)\dmet 502 (computer graphics)\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(325): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
-c:\users\rana\documents\7th semester (csen)\dmet 502 (computer graphics)\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(456): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
+c:\users\rana\documents\7th semester (csen)\dmet 502 (computer graphics)\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(65): warning C4200: nonstandard extension used: zero-sized array in struct/union
+  c:\users\rana\documents\7th semester (csen)\dmet 502 (computer graphics)\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(65): note: This member will be ignored by a defaulted constructor or copy/move assignment operator
+c:\users\rana\documents\7th semester (csen)\dmet 502 (computer graphics)\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(330): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
+c:\users\rana\documents\7th semester (csen)\dmet 502 (computer graphics)\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(333): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
+c:\users\rana\documents\7th semester (csen)\dmet 502 (computer graphics)\project\littlebiguniverse\openglmeshloader\littlebiguniverse.cpp(464): warning C4838: conversion from 'double' to 'GLfloat' requires a narrowing conversion
 GLTexture.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
   OpenGLMeshLoader.vcxproj -> C:\Users\Rana\Documents\7th Semester (CSEN)\DMET 502 (Computer Graphics)\Project\LittleBigUniverse\OpenGLMeshLoader\Debug\LittleBigUniverse.exe
   OpenGLMeshLoader.vcxproj -> C:\Users\Rana\Documents\7th Semester (CSEN)\DMET 502 (Computer Graphics)\Project\LittleBigUniverse\OpenGLMeshLoader\Debug\LittleBigUniverse.pdb (Full PDB)
