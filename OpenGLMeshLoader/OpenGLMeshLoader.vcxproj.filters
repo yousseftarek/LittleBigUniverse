@@ -32,5 +32,8 @@
     <ClInclude Include="Model_3DS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SOIL.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
