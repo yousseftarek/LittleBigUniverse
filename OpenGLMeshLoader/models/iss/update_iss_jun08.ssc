@@ -1,0 +1,16 @@
+# ssc file by Ulrich Dickmann (Adirondack)
+
+    Modify "ISS" "Sol/Earth"
+    {
+    Mesh "ISSjun08.3ds"
+    
+	UniformRotation
+	{
+	Inclination    51.5684
+	MeridianAngle  -90
+	AscendingNode 343.1518
+	}
+	
+	Orientation [90 0 0 1]
+}
+	

@@ -435,9 +435,11 @@ bool canShowText(int x, int y) {
 }
 
 // An Example of how to create and use models (Model Variables)
-//Model_3DS model_house;
-//Model_3DS model_tree;
 
+Model_3DS model_phobos;
+Model_3DS model_deimos;
+Model_3DS model_hubble;
+Model_3DS model_ISS;
 //=======================================================================
 // Lighting Configuration Function
 //=======================================================================
@@ -542,6 +544,7 @@ void myDisplay(void)
 	glLightfv(GL_LIGHT0, GL_AMBIENT, lightIntensity);
 	glEnable(GL_TEXTURE_2D);*/
 	//Draw Tree Model
+
 	glEnable(GL_LIGHTING);
 	glEnable(GL_TEXTURE_2D);
 	
@@ -700,6 +703,17 @@ void myReshape(int w, int h)
 //=======================================================================
 // Assets Loading Function
 //=======================================================================
+void LoadAssets()
+{
+	//Loading Model files
+	//model_house.Load("Models/house/house.3ds");
+	model_phobos.Load("models/Mars/Phobos/models/phobos.3ds");
+	model_deimos.Load("models/Mars/Phobos/models/deimos.3ds");
+	model_hubble.Load("models/BigHubble/models/bigHubble.3ds");
+	model_ISS.Load("models/iss/models/ISSjun08.3ds");
+	//Loading texture files
+
+}
 
 
 void loadImages() {
@@ -772,6 +786,7 @@ void loadImages() {
 		SOIL_CREATE_NEW_ID,
 		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
 		);
+
 }
 
 void anim() {
@@ -835,6 +850,8 @@ void main(int argc, char** argv)
 
 	glutCreateWindow(title);
 
+	initializePlanets();
+
 	glutDisplayFunc(myDisplay);
 
 	glutKeyboardFunc(myKeyboard);
@@ -854,6 +871,7 @@ void main(int argc, char** argv)
 	glEnable(GL_TEXTURE_2D);
 	
 	loadImages();
+	LoadAssets();
 	initializePlanets();
 	glutWarpPointer(WIDTH / 2, HEIGHT / 2);
 
