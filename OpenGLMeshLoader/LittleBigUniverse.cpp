@@ -1,15 +1,13 @@
 //kernel32.lib, user32.lib, gdi32.lib and advapi32.lib
 //#pragma comment(lib, "legacy_stdio_definitions.lib")
-
-
 #include "TextureBuilder.h"
 #include "Model_3DS.h"
 #include "GLTexture.h"
 
 #include <irrKlang/irrKlang.h>
-
 using namespace irrklang;
 #pragma comment(lib, "irrKlang.lib") // link with irrKlang.dll
+
 #include <string>
 #include <iostream>
 #include <glut.h>
@@ -22,8 +20,6 @@ bool canShowText(int, int);
 
 using namespace std;
 
-
-
 #define degree 0.0174533
 #define DEG2RAD 3.14159/180.0
 
@@ -33,6 +29,7 @@ int HEIGHT = 720;
 int mouseX= WIDTH/2, mouseY = HEIGHT/2;
 
 double rotY = 0;
+double rotHubble = 0;
 float angleMercury = 0;
 float angleVenus = 0;
 float angleEarth = 0;
@@ -45,16 +42,19 @@ float anglePluto = 0;
 
 bool showText = true;
 
-
-
 //Textures
-GLuint tex, sunTexture, mercuryTexture, venusTexture, earthTexture, marsTexture, jupiterTexture, saturnTexture, uranusTexture, neptuneTexture, plutoTexture;
-
+GLuint tex, sunTexture, moonTexture, mercuryTexture, venusTexture, earthTexture, marsTexture, jupiterTexture, saturnTexture, uranusTexture, neptuneTexture, plutoTexture;
 
 float xpos = 0, ypos = 0, zpos = 0, xrot = 0, yrot = 0, angle = 0.0;
 float lastx, lasty;
 
 double rotSunX, rotSunY, rotSunZ;
+
+// An Example of how to create and use models (Model Variables)
+Model_3DS model_phobos;
+Model_3DS model_deimos;
+Model_3DS model_hubble;
+Model_3DS model_ISS;
 
 struct Moon {
 	double radius;
@@ -234,55 +234,55 @@ void drawPlanet(Planet planet, int x, int y, int z, double rotFactor) {
 	//ellipse path
 	float planetx = 0;
 	float planety = 0;
-	planetx = radOne * 2 *cos(angle);
-	planety = radTwo * 2 * sin(angle);
-	DrawEllipse(radOne *2 , radTwo*2);
+	planetx = radOne *2 *cos(angle);
+	planety = radTwo *2 * sin(angle);
+	DrawEllipse(radOne*2 , radTwo*2);
 
 	//text
 	glPushMatrix();
 	if (planet.name == "Mercury" && canShowText(planetx, planety)) {
-		TextSmall(planetx, 15, planety + 10, 1.0f, 1.0f, 1.0f, "Mercury");
-		TextBig(planetx, 10, planety + 10, 1.0f, 1.0f, 1.0f, "170,503 KM/H");
+		TextSmall(planetx, 25, planety + 10, 1.0f, 1.0f, 1.0f, "Mercury");
+		TextBig(planetx, 15, planety + 10, 1.0f, 1.0f, 1.0f, "170,503 KM/H");
 		TextSmall(planetx, 5, planety + 10, 1.0f, 1.0f, 1.0f, "Orbit Velocity");
 	}
 	else if (planet.name == "Venus" && canShowText(planetx, planety)) {
-		TextSmall(planetx, 15, planety + 10, 1.0f, 1.0f, 1.0f, "Venus");
-		TextBig(planetx, 10, planety + 10, 1.0f, 1.0f, 1.0f, "126,074 KM/H");
+		TextSmall(planetx, 25, planety + 10, 1.0f, 1.0f, 1.0f, "Venus");
+		TextBig(planetx, 15, planety + 10, 1.0f, 1.0f, 1.0f, "126,074 KM/H");
 		TextSmall(planetx, 5, planety + 10, 1.0f, 1.0f, 1.0f, "Orbit Velocity");
 	}
 	else if (planet.name == "Earth" && canShowText(planetx, planety)) {
-		TextSmall(planetx, 15, planety + 10, 1.0f, 1.0f, 1.0f, "Earth");
-		TextBig(planetx, 10, planety + 10, 1.0f, 1.0f, 1.0f, "107,218 KM/H");
+		TextSmall(planetx, 25, planety + 10, 1.0f, 1.0f, 1.0f, "Earth");
+		TextBig(planetx, 15, planety + 10, 1.0f, 1.0f, 1.0f, "107,218 KM/H");
 		TextSmall(planetx, 5, planety + 10, 1.0f, 1.0f, 1.0f, "Orbit Velocity");
 	}
 	else if (planet.name == "Mars" && canShowText(planetx, planety)) {
-		TextSmall(planetx, 15, planety + 10, 1.0f, 1.0f, 1.0f, "Mars");
-		TextBig(planetx, 10, planety + 10, 1.0f, 1.0f, 1.0f, "86,677 KM/H");
+		TextSmall(planetx, 25, planety + 10, 1.0f, 1.0f, 1.0f, "Mars");
+		TextBig(planetx, 15, planety + 10, 1.0f, 1.0f, 1.0f, "86,677 KM/H");
 		TextSmall(planetx, 5, planety + 10, 1.0f, 1.0f, 1.0f, "Orbit Velocity");
 	}
 	else if (planet.name == "Jupiter" && canShowText(planetx, planety)) {
-		TextSmall(planetx, 15, planety + 10, 1.0f, 1.0f, 1.0f, "Jupiter");
-		TextBig(planetx, 10, planety + 10, 1.0f, 1.0f, 1.0f, "47,002 KM/H");
-		TextSmall(planetx, 5, planety + 10, 1.0f, 1.0f, 1.0f, "Orbit Velocity");
+		TextSmall(planetx, 85, planety + 10, 1.0f, 1.0f, 1.0f, "Jupiter");
+		TextBig(planetx, 80, planety + 10, 1.0f, 1.0f, 1.0f, "47,002 KM/H");
+		TextSmall(planetx, 75, planety + 10, 1.0f, 1.0f, 1.0f, "Orbit Velocity");
 	}
 	else if (planet.name == "Saturn" && canShowText(planetx, planety)) {
-		TextSmall(planetx, 15, planety + 10, 1.0f, 1.0f, 1.0f, "Saturn");
-		TextBig(planetx, 10, planety + 10, 1.0f, 1.0f, 1.0f, "34,701 KM/H");
-		TextSmall(planetx, 5, planety + 10, 1.0f, 1.0f, 1.0f, "Orbit Velocity");
+		TextSmall(planetx, 65, planety + 10, 1.0f, 1.0f, 1.0f, "Saturn");
+		TextBig(planetx, 60, planety + 10, 1.0f, 1.0f, 1.0f, "34,701 KM/H");
+		TextSmall(planetx, 55, planety + 10, 1.0f, 1.0f, 1.0f, "Orbit Velocity");
 	}
 	else if (planet.name == "Uranus" && canShowText(planetx, planety)) {
-		TextSmall(planetx, 15, planety + 10, 1.0f, 1.0f, 1.0f, "Uranus");
-		TextBig(planetx, 10, planety + 10, 1.0f, 1.0f, 1.0f, "24,477 KM/H");
+		TextSmall(planetx, 25, planety + 10, 1.0f, 1.0f, 1.0f, "Uranus");
+		TextBig(planetx, 15, planety + 10, 1.0f, 1.0f, 1.0f, "24,477 KM/H");
 		TextSmall(planetx, 5, planety + 10, 1.0f, 1.0f, 1.0f, "Orbit Velocity");
 	}
 	else if (planet.name == "Neptune" && canShowText(planetx, planety)) {
-		TextSmall(planetx, 15, planety + 10, 1.0f, 1.0f, 1.0f, "Neptune");
-		TextBig(planetx, 10, planety + 10, 1.0f, 1.0f, 1.0f, "19,566 KM/H");
+		TextSmall(planetx, 25, planety + 10, 1.0f, 1.0f, 1.0f, "Neptune");
+		TextBig(planetx, 15, planety + 10, 1.0f, 1.0f, 1.0f, "19,566 KM/H");
 		TextSmall(planetx, 5, planety + 10, 1.0f, 1.0f, 1.0f, "Orbit Velocity");
 	}
 	else if (planet.name == "Pluto" && canShowText(planetx, planety)) {
-		TextSmall(planetx, 15, planety + 10, 1.0f, 1.0f, 1.0f, "Pluto");
-		TextBig(planetx, 10, planety + 10, 1.0f, 1.0f, 1.0f, "16,809 KM/H");
+		TextSmall(planetx, 25, planety + 10, 1.0f, 1.0f, 1.0f, "Pluto");
+		TextBig(planetx, 15, planety + 10, 1.0f, 1.0f, 1.0f, "16,809 KM/H");
 		TextSmall(planetx, 5, planety + 10, 1.0f, 1.0f, 1.0f, "Orbit Velocity");
 	}
 	glPopMatrix();
@@ -299,6 +299,55 @@ void drawPlanet(Planet planet, int x, int y, int z, double rotFactor) {
 	gluQuadricDrawStyle(quadric, GLU_FILL);
 	gluQuadricTexture(quadric, 1);
 	gluSphere(quadric, planet.radius, 100, 100);
+	
+	//glPushMatrix();
+	if (planet.name == "Earth") {
+		
+		//moon
+		glPushMatrix();
+		glRotated(-90, 1, 0, 0);
+		float Moonx = 0;
+		float Moony = 0;
+		float angelMoon = degree;
+		Moonx = 90 * cos(angelMoon);
+		Moony = 100 * sin(angelMoon);
+		DrawEllipse(90, 100);
+		
+		glTranslated(Moonx, 0, Moony);
+
+		glPushMatrix();
+
+		glBindTexture(GL_TEXTURE_2D, moonTexture);
+		GLUquadricObj *quadric1;
+		quadric1 = gluNewQuadric();
+		gluQuadricDrawStyle(quadric1, GLU_FILL);
+		gluQuadricTexture(quadric1, 1);
+		gluSphere(quadric1, 20, 100, 100);
+
+		glPopMatrix();
+		glPopMatrix();
+
+		//hubble
+	//	glPushMatrix();
+	//	glRotated(45, 1, 0, 0);
+	//	float hubblex = 0;
+	//	float hubbley = 0;
+	//	hubblex =90 * cos(angle);
+	//	hubbley = 100 * sin(angle);
+	//	DrawEllipse(90, 100);
+
+	//	glTranslated(hubblex, 0, hubbley);
+
+	//	//rotation 7awalen nafsy
+	//	glRotated(rotY * rotHubble * 2, 0, 1, 0);
+	//
+	//	glRotated(90, 1, 0, 0);
+	//	glScaled(0.1, 0.1, 0.1);
+	////	model_hubble.Draw();
+	//	glPopMatrix();
+
+	}
+	//glPopMatrix();
 
 	//rings
 	if (planet.name == "Saturn") {
@@ -435,19 +484,14 @@ int cameraZoom = 0;
 
 
 bool canShowText(int x, int y) {
-	if (abs(At.z - y) < 150 && abs(At.x - x) < 150)
+	/*if (abs(At.z - y) < 1000 && abs(At.x - x) < 1000)
 		showText = true;
 	else
-		showText = false;
-	return showText;
+		showText = false;*/
+	//return showText;
+	return true;
 }
 
-// An Example of how to create and use models (Model Variables)
-
-Model_3DS model_phobos;
-Model_3DS model_deimos;
-Model_3DS model_hubble;
-Model_3DS model_ISS;
 //=======================================================================
 // Lighting Configuration Function
 //=======================================================================
@@ -718,7 +762,7 @@ void LoadAssets()
 	model_phobos.Load("models/Mars/Phobos/models/phobos.3ds");
 	model_deimos.Load("models/Mars/Phobos/models/deimos.3ds");
 	model_hubble.Load("models/BigHubble/models/bigHubble.3ds");
-	model_ISS.Load("models/iss/models/ISSjun08.3ds");
+	//model_ISS.Load("models/iss/models/ISSjun08.3ds");
 	//Loading texture files
 
 }
@@ -794,7 +838,12 @@ void loadImages() {
 		SOIL_CREATE_NEW_ID,
 		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
 		);
-
+	moonTexture = SOIL_load_OGL_texture(
+		"textures/earth/moon.bmp",
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
 }
 
 void anim() {
@@ -805,10 +854,9 @@ void anim() {
 		rotSunY = 0;
 	}
 	rotY += 20;
+	rotHubble += 5;
 
-	//glutWarpPointer(WIDTH / 2, HEIGHT / 2);
-
-	
+	//glutWarpPointer(WIDTH / 2, HEIGHT / 2);	
 	glutPostRedisplay();
 }
 
