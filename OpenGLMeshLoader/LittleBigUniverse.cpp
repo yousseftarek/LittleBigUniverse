@@ -339,14 +339,13 @@ void drawPlanet(Planet planet, int x, int y, int z, double rotFactor) {
 		DrawEllipse(90, 100);
 
 		glTranslated(hubblex, 0, hubbley);
-
 		//rotation 7awalen nafsy
 		glRotated(rotHubble * 2, 0, 1, 0);
 
 		glPushMatrix();
 		glRotated(90, 1, 0, 0);
 		glScaled(0.1, 0.1, 0.1);
-		//model_hubble.Draw();
+		model_hubble.Draw();
 		glPopMatrix();
 		glPopMatrix();
 
