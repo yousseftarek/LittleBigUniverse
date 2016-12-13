@@ -14,6 +14,7 @@ using namespace irrklang;
 #include <math.h>
 #include "SOIL.h"
 
+
 void initializeSpace(void);
 bool canShowText(int, int);
 
@@ -42,17 +43,21 @@ float anglePluto = 0;
 
 float angleMoon = 0, angleISS = 0, angleHubble = 0, anglePhobos = 0, angleDeimos = 0;
 
+
 bool showText = true;
 
 //Textures
 GLuint tex, sunTexture, moonTexture, mercuryTexture, venusTexture, earthTexture, marsTexture, jupiterTexture, saturnTexture, uranusTexture, neptuneTexture, plutoTexture;
+
 
 float xpos = 0, ypos = 0, zpos = 0, xrot = 0, yrot = 0, angle = 0.0;
 float lastx, lasty;
 
 double rotSunX, rotSunY, rotSunZ;
 
+
 // An Example of how to create and use models (Model Variables)
+
 Model_3DS model_phobos;
 Model_3DS model_deimos;
 Model_3DS model_hubble;
@@ -414,6 +419,119 @@ void drawPlanet(Planet planet, int x, int y, int z, double rotFactor) {
 
 	}
 
+	if (planet.name == "Earth") {
+
+		//moon
+		glPushMatrix();
+		glRotated(-90, 1, 0, 0);
+		float Moonx = 0;
+		float Moony = 0;
+		angleMoon += angleEarth * 0.007;
+		Moonx = 90 * cos(angleMoon);
+		Moony = 100 * sin(angleMoon);
+		DrawEllipse(90, 100);
+
+		glTranslated(Moonx, 0, Moony);
+
+		glPushMatrix();
+
+		glBindTexture(GL_TEXTURE_2D, moonTexture);
+		GLUquadricObj *quadric1;
+		quadric1 = gluNewQuadric();
+		gluQuadricDrawStyle(quadric1, GLU_FILL);
+		gluQuadricTexture(quadric1, 1);
+		gluSphere(quadric1, 20, 100, 100);
+
+		glPopMatrix();
+		glPopMatrix();
+
+		//hubble
+		glPushMatrix();
+		glRotated(45, 1, 0, 0);
+		float hubblex = 0;
+		float hubbley = 0;
+		angleHubble += angleEarth * 0.006;
+		hubblex = 90 * cos(angleHubble);
+		hubbley = 100 * sin(angleHubble);
+		DrawEllipse(90, 100);
+
+		glTranslated(hubblex, 0, hubbley);
+
+		//rotation 7awalen nafsy
+		glRotated(rotHubble * 2, 0, 1, 0);
+
+		glPushMatrix();
+		glRotated(90, 1, 0, 0);
+		glScaled(0.1, 0.1, 0.1);
+		//model_hubble.Draw();
+		glPopMatrix();
+		glPopMatrix();
+
+		//ISS
+		glPushMatrix();
+		glRotated(-45, 1, 0, 0);
+		float ISSx = 0;
+		float ISSy = 0;
+		angleISS += angleEarth * 0.006;
+		ISSx = 90 * cos(angleISS);
+		ISSy = 100 * sin(angleISS);
+		DrawEllipse(90, 100);
+
+		glTranslated(ISSx, 0, ISSy);
+
+		//rotation 7awalen nafsy
+		glRotated(rotY * rotHubble * 2, 0, 1, 0);
+
+		glPushMatrix();
+		glScaled(200, 200, 200);
+		model_ISS.Draw();
+		glPopMatrix();
+		glPopMatrix();
+
+	}
+
+	if (planet.name == "Mars") {
+
+		//deimos
+		glPushMatrix();
+		glRotated(90, 1, 0, 0);
+		float r1 = 80;
+		float r2 = 100;
+		angleDeimos += angleMars * 0.007;
+		float deimosx = 0;
+		float deimosy = 0;
+		deimosx = r1 * cos(angleDeimos);
+		deimosy = r2 * sin(angleDeimos);
+		//DrawEllipse(r1, r2);
+
+		glTranslated(deimosx, -25, deimosy);
+		glPushMatrix();
+		glRotated(90, 1, 0, 0);
+		glScaled(2, 2, 2);
+		model_deimos.Draw();
+		glPopMatrix();
+		glPopMatrix();
+
+		//phobos
+		glPushMatrix();
+		glRotated(90, 1, 0, 0);
+		float phobosx = 10;
+		float phobosy = 20;
+		anglePhobos += angleMars * 0.006;
+		phobosx = 60 * cos(anglePhobos);
+		phobosy = 70 * sin(anglePhobos);
+		//DrawEllipse(60, 70);
+
+		glTranslated(phobosx + 10, 10, phobosy);
+		glPushMatrix();
+		glRotated(90, 1, 0, 0);
+		glScaled(0.8, 0.8, 0.8);
+		model_phobos.Draw();
+		glPopMatrix();
+		glPopMatrix();
+
+	}
+
 	//rings
 	if (planet.name == "Saturn") {
 		glPushMatrix();
@@ -541,12 +659,144 @@ public:
 };
 
 //Initialization of vectors controlling the camera.
-Vector Eye(0,0,500);
+Vector Eye(0,500,400);
 Vector At(0, 0, 0);
 Vector Up(0, 1, 0);
 
+Vector n(0, 0, 0);
+Vector v(0, 0, 0);
+Vector u(0, 0, 0);
+
 int cameraZoom = 0;
 
+float* vectorCross(int x1, int y1, int z1, int x2, int y2, int z2) {
+	float result[3];
+
+	result[0] = y1*z2 - z1*y2;
+	result[1] = z1*x2 - x1*z2;
+	result[2] = x1*y2 - y1*x2;
+	 
+	return result;
+}
+
+void moveRight() {
+	n.x = At.x - Eye.x;
+	n.y = At.y - Eye.y;
+	n.z = At.z - Eye.z;
+
+
+	Vector unitN(0, 0, 0);
+
+	float mag = sqrt((n.x*n.x) + (n.y*n.y) + (n.z*n.z));
+
+	unitN.x = n.x / mag;
+	unitN.y = n.y / mag;
+	unitN.z = n.z / mag;
+
+	
+
+	Vector upDash(0, 0, 0);
+
+	float dot = Up.x*unitN.x + Up.y*unitN.y + Up.z*unitN.z;
+
+	Vector temp(dot*unitN.x, dot*unitN.y, dot*unitN.z);
+
+	//std::cout << dot;
+
+	
+
+	/*float *temp2 = vectorCross(temp.x, temp.y, temp.z, unitN.x, unitN.y, unitN.z);
+
+	Vector temp3(temp2[0], temp2[1], temp2[2]);*/
+
+	upDash.x = Up.x - temp.x;
+	upDash.y = Up.y - temp.y;
+	upDash.z = Up.z - temp.z;
+
+	std::cout << "\n";
+	std::cout << upDash.x;
+	std::cout << "\n";
+	std::cout << upDash.y;
+	std::cout << "\n";
+	std::cout << upDash.z;
+
+	float magUpDash = sqrt((upDash.x*upDash.x) + (upDash.y*upDash.y) + (upDash.z*upDash.z));
+	v.x = upDash.x / magUpDash;
+	v.y = upDash.y / magUpDash;
+	v.z = upDash.z / magUpDash;
+
+	float *temp4 = vectorCross(v.x, v.y, v.z, unitN.x, unitN.y, unitN.z);
+
+	u.x = temp4[0];
+	u.y = temp4[1];
+	u.z = temp4[2];
+
+	
+
+	Eye.x = Eye.x + u.x*100;
+	Eye.y = Eye.y + u.y*100;
+	Eye.z = Eye.z + u.z*100;
+
+	
+
+	gluLookAt(Eye.x, Eye.y, Eye.z, At.x, At.y, At.z, Up.x, Up.y, Up.z);
+
+	Up.x = upDash.x;
+	Up.y = upDash.y;
+	Up.z = upDash.z;
+
+	
+}
+
+void moveLeft() {
+	n.x = At.x - Eye.x;
+	n.y = At.y - Eye.y;
+	n.z = At.z - Eye.z;
+
+	Vector unitN(0, 0, 0);
+
+	float mag = (sqrt((n.x*n.x) + (n.y*n.y) + (n.z*n.z)));
+
+	unitN.x = n.x / mag;
+	unitN.y = n.y / mag;
+	unitN.z = n.z / mag;
+
+	Vector upDash(0, 0, 0);
+
+	float dot = Up.x*unitN.x + Up.y*unitN.y + Up.z*unitN.z;
+	Vector temp(dot*unitN.x, dot*unitN.y, dot*unitN.z);
+
+	/*float *temp2 = vectorCross(temp.x, temp.y, temp.z, unitN.x, unitN.y, unitN.z);
+
+	Vector temp3(temp2[0], temp2[1], temp2[2]);*/
+
+	upDash.x = Up.x - temp.x;
+	upDash.y = Up.y - temp.y;
+	upDash.z = Up.z - temp.z;
+
+	float magUpDash = (sqrt((upDash.x*upDash.x) + (upDash.y*upDash.y) + (upDash.z*upDash.z)));
+	v.x = (int)upDash.x / magUpDash;
+	v.y = (int)upDash.y / magUpDash;
+	v.z = (int)upDash.z / magUpDash;
+
+	float *temp4 = vectorCross(v.x, v.y, v.z, unitN.x, unitN.y, unitN.z);
+
+	u.x = temp4[0];
+	u.y = temp4[1];
+	u.z = temp4[2];
+
+	Eye.x = Eye.x - u.x*100;
+	Eye.y = Eye.y - u.y*100;
+	Eye.z = Eye.z - u.z*100;
+
+	gluLookAt(Eye.x, Eye.y, Eye.z, At.x, At.y, At.z, Up.x, Up.y, Up.z);
+
+	Up.x = upDash.x;
+	Up.y = upDash.y;
+	Up.z = upDash.z;
+
+	
+}
 
 bool canShowText(int x, int y) {
 	/*if (abs(At.z - y) < 1000 && abs(At.x - x) < 1000)
@@ -556,6 +806,7 @@ bool canShowText(int x, int y) {
 	//return showText;
 	return true;
 }
+
 
 //=======================================================================
 // Lighting Configuration Function
@@ -725,6 +976,8 @@ void myKeyboard(unsigned char key, int x, int y)
 		yrotrad = (yrot / 180 * 3.141592654f);
 		xpos += 10 * float(cos(yrotrad)) * 0.2;
 		zpos += 10 * float(sin(yrotrad)) * 0.2;
+
+		//moveRight();
 	}
 
 	if (key == 'a')
@@ -733,6 +986,7 @@ void myKeyboard(unsigned char key, int x, int y)
 		yrotrad = (yrot / 180 * 3.141592654f);
 		xpos -= 10 * float(cos(yrotrad)) * 0.2;
 		zpos -= 10 * float(sin(yrotrad)) * 0.2;
+		//moveLeft();
 	}
 
 	if (key == 27)
@@ -908,7 +1162,8 @@ void loadImages() {
 		SOIL_LOAD_AUTO,
 		SOIL_CREATE_NEW_ID,
 		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
-	);
+		);
+
 }
 
 void anim() {
